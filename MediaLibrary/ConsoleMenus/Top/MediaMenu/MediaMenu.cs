@@ -8,6 +8,7 @@ public class MediaMenu : MenuBase
 {
     public MediaMenu() : base($"Movie Options", 1)
     {
+        
         ThisMenu.Add("Display All", () => { new MediaDisplayMenu().Run(); }
             )
             .Add("Add to File", () => { new AddMenu().Run(); }
