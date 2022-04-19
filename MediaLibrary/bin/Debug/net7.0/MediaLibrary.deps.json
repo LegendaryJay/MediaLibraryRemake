@@ -12,10 +12,11 @@
           "Microsoft.EntityFrameworkCore": "7.0.0-preview.3.22175.1",
           "Microsoft.EntityFrameworkCore.Design": "7.0.0-preview.3.22175.1",
           "Microsoft.EntityFrameworkCore.Proxies": "6.0.4",
-          "Microsoft.EntityFrameworkCore.SqlServer": "7.0.0-preview.2.22153.1",
+          "Microsoft.EntityFrameworkCore.SqlServer": "7.0.0-preview.3.22175.1",
           "Microsoft.EntityFrameworkCore.Tools": "7.0.0-preview.3.22175.1",
           "Microsoft.EntityFrameworkCore.Tools.DotNet": "2.0.3",
           "Microsoft.Extensions.Configuration.Json": "7.0.0-preview.3.22175.4",
+          "ReadLine": "2.0.1",
           "TypeConvert": "2.1.6"
         },
         "runtime": {
@@ -101,7 +102,7 @@
         }
       },
       "Microsoft.CSharp/4.5.0": {},
-      "Microsoft.Data.SqlClient/4.0.1": {
+      "Microsoft.Data.SqlClient/4.1.0": {
         "dependencies": {
           "Azure.Identity": "1.3.0",
           "Microsoft.Data.SqlClient.SNI.runtime": "4.0.0",
@@ -122,22 +123,22 @@
         },
         "runtime": {
           "lib/netcoreapp3.1/Microsoft.Data.SqlClient.dll": {
-            "assemblyVersion": "4.0.0.0",
-            "fileVersion": "4.0.0.0"
+            "assemblyVersion": "4.1.0.0",
+            "fileVersion": "4.1.0.0"
           }
         },
         "runtimeTargets": {
           "runtimes/unix/lib/netcoreapp3.1/Microsoft.Data.SqlClient.dll": {
             "rid": "unix",
             "assetType": "runtime",
-            "assemblyVersion": "4.0.0.0",
-            "fileVersion": "4.0.0.0"
+            "assemblyVersion": "4.1.0.0",
+            "fileVersion": "4.1.0.0"
           },
           "runtimes/win/lib/netcoreapp3.1/Microsoft.Data.SqlClient.dll": {
             "rid": "win",
             "assetType": "runtime",
-            "assemblyVersion": "4.0.0.0",
-            "fileVersion": "4.0.0.0"
+            "assemblyVersion": "4.1.0.0",
+            "fileVersion": "4.1.0.0"
           }
         }
       },
@@ -228,15 +229,15 @@
           }
         }
       },
-      "Microsoft.EntityFrameworkCore.SqlServer/7.0.0-preview.2.22153.1": {
+      "Microsoft.EntityFrameworkCore.SqlServer/7.0.0-preview.3.22175.1": {
         "dependencies": {
-          "Microsoft.Data.SqlClient": "4.0.1",
+          "Microsoft.Data.SqlClient": "4.1.0",
           "Microsoft.EntityFrameworkCore.Relational": "7.0.0-preview.3.22175.1"
         },
         "runtime": {
           "lib/net6.0/Microsoft.EntityFrameworkCore.SqlServer.dll": {
             "assemblyVersion": "7.0.0.0",
-            "fileVersion": "7.0.22.15301"
+            "fileVersion": "7.0.22.17501"
           }
         }
       },
@@ -599,6 +600,14 @@
           "lib/netstandard1.3/Newtonsoft.Json.dll": {
             "assemblyVersion": "10.0.0.0",
             "fileVersion": "10.0.1.20720"
+          }
+        }
+      },
+      "ReadLine/2.0.1": {
+        "runtime": {
+          "lib/netstandard2.0/ReadLine.dll": {
+            "assemblyVersion": "2.0.1.0",
+            "fileVersion": "2.0.1.0"
           }
         }
       },
@@ -1210,12 +1219,12 @@
       "path": "microsoft.csharp/4.5.0",
       "hashPath": "microsoft.csharp.4.5.0.nupkg.sha512"
     },
-    "Microsoft.Data.SqlClient/4.0.1": {
+    "Microsoft.Data.SqlClient/4.1.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-f6jCM9JZ/qZXWA+TcTffGN8LISOF05wK5C6fAXWvN6tn0r+cUfVxfroY+QM4seMnRy1KjKuy47m+XZN25ZlSCg==",
-      "path": "microsoft.data.sqlclient/4.0.1",
-      "hashPath": "microsoft.data.sqlclient.4.0.1.nupkg.sha512"
+      "sha512": "sha512-o/sIRlcKEcI9vg5z9USqJ/VCxtUUBYEOXYr4TrkMNu+gGBh0KfUi06Jqpe+xZgeoxcqYruV9dLOn046uFA4vHQ==",
+      "path": "microsoft.data.sqlclient/4.1.0",
+      "hashPath": "microsoft.data.sqlclient.4.1.0.nupkg.sha512"
     },
     "Microsoft.Data.SqlClient.SNI.runtime/4.0.0": {
       "type": "package",
@@ -1266,12 +1275,12 @@
       "path": "microsoft.entityframeworkcore.relational/7.0.0-preview.3.22175.1",
       "hashPath": "microsoft.entityframeworkcore.relational.7.0.0-preview.3.22175.1.nupkg.sha512"
     },
-    "Microsoft.EntityFrameworkCore.SqlServer/7.0.0-preview.2.22153.1": {
+    "Microsoft.EntityFrameworkCore.SqlServer/7.0.0-preview.3.22175.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-A3NT2WnVEA9cQBo9kI+JLcs0HMaAYIiZx+Mbgm2DIwqYyRHCtAfDzHTGaijrIZXTdfMI5SFClYEe1qhQWJiz6g==",
-      "path": "microsoft.entityframeworkcore.sqlserver/7.0.0-preview.2.22153.1",
-      "hashPath": "microsoft.entityframeworkcore.sqlserver.7.0.0-preview.2.22153.1.nupkg.sha512"
+      "sha512": "sha512-Y4rbTRbLXMHovmyfQQ+mQHnG7wPgXBMfCsD/mcBNdaN/+Pum9KNSjUWvuOXzLeY3DcivPx1rz966uLvK4wVVTA==",
+      "path": "microsoft.entityframeworkcore.sqlserver/7.0.0-preview.3.22175.1",
+      "hashPath": "microsoft.entityframeworkcore.sqlserver.7.0.0-preview.3.22175.1.nupkg.sha512"
     },
     "Microsoft.EntityFrameworkCore.Tools/7.0.0-preview.3.22175.1": {
       "type": "package",
@@ -1517,6 +1526,13 @@
       "sha512": "sha512-ebWzW9j2nwxQeBo59As2TYn7nYr9BHicqqCwHOD1Vdo+50HBtLPuqdiCYJcLdTRknpYis/DSEOQz5KmZxwrIAg==",
       "path": "newtonsoft.json/10.0.1",
       "hashPath": "newtonsoft.json.10.0.1.nupkg.sha512"
+    },
+    "ReadLine/2.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-m3eptlV2hlZ3gWxdhvgsUpSjwyA3NCeLdbhgDt0V8rXP1E6ZbjOOExcAufHvAZepSKJvV+zZO1eYWGveShA4gw==",
+      "path": "readline/2.0.1",
+      "hashPath": "readline.2.0.1.nupkg.sha512"
     },
     "runtime.native.System/4.3.0": {
       "type": "package",

@@ -95,7 +95,7 @@
           "lib/netcoreapp2.0/_._": {}
         }
       },
-      "Microsoft.Data.SqlClient/4.0.1": {
+      "Microsoft.Data.SqlClient/4.1.0": {
         "type": "package",
         "dependencies": {
           "Azure.Identity": "1.3.0",
@@ -232,11 +232,11 @@
           "lib/net6.0/Microsoft.EntityFrameworkCore.Relational.dll": {}
         }
       },
-      "Microsoft.EntityFrameworkCore.SqlServer/7.0.0-preview.2.22153.1": {
+      "Microsoft.EntityFrameworkCore.SqlServer/7.0.0-preview.3.22175.1": {
         "type": "package",
         "dependencies": {
-          "Microsoft.Data.SqlClient": "4.0.1",
-          "Microsoft.EntityFrameworkCore.Relational": "7.0.0-preview.2.22153.1"
+          "Microsoft.Data.SqlClient": "4.1.0",
+          "Microsoft.EntityFrameworkCore.Relational": "7.0.0-preview.3.22175.1"
         },
         "compile": {
           "lib/net6.0/Microsoft.EntityFrameworkCore.SqlServer.dll": {}
@@ -872,6 +872,15 @@
         },
         "runtime": {
           "lib/netstandard1.3/Newtonsoft.Json.dll": {}
+        }
+      },
+      "ReadLine/2.0.1": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/ReadLine.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/ReadLine.dll": {}
         }
       },
       "runtime.native.System/4.3.0": {
@@ -2014,10 +2023,10 @@
         "version.txt"
       ]
     },
-    "Microsoft.Data.SqlClient/4.0.1": {
-      "sha512": "f6jCM9JZ/qZXWA+TcTffGN8LISOF05wK5C6fAXWvN6tn0r+cUfVxfroY+QM4seMnRy1KjKuy47m+XZN25ZlSCg==",
+    "Microsoft.Data.SqlClient/4.1.0": {
+      "sha512": "o/sIRlcKEcI9vg5z9USqJ/VCxtUUBYEOXYr4TrkMNu+gGBh0KfUi06Jqpe+xZgeoxcqYruV9dLOn046uFA4vHQ==",
       "type": "package",
-      "path": "microsoft.data.sqlclient/4.0.1",
+      "path": "microsoft.data.sqlclient/4.1.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -2044,7 +2053,7 @@
         "lib/netstandard2.1/Microsoft.Data.SqlClient.dll",
         "lib/netstandard2.1/Microsoft.Data.SqlClient.pdb",
         "lib/netstandard2.1/Microsoft.Data.SqlClient.xml",
-        "microsoft.data.sqlclient.4.0.1.nupkg.sha512",
+        "microsoft.data.sqlclient.4.1.0.nupkg.sha512",
         "microsoft.data.sqlclient.nuspec",
         "ref/net461/Microsoft.Data.SqlClient.dll",
         "ref/net461/Microsoft.Data.SqlClient.pdb",
@@ -2176,17 +2185,17 @@
         "microsoft.entityframeworkcore.relational.nuspec"
       ]
     },
-    "Microsoft.EntityFrameworkCore.SqlServer/7.0.0-preview.2.22153.1": {
-      "sha512": "A3NT2WnVEA9cQBo9kI+JLcs0HMaAYIiZx+Mbgm2DIwqYyRHCtAfDzHTGaijrIZXTdfMI5SFClYEe1qhQWJiz6g==",
+    "Microsoft.EntityFrameworkCore.SqlServer/7.0.0-preview.3.22175.1": {
+      "sha512": "Y4rbTRbLXMHovmyfQQ+mQHnG7wPgXBMfCsD/mcBNdaN/+Pum9KNSjUWvuOXzLeY3DcivPx1rz966uLvK4wVVTA==",
       "type": "package",
-      "path": "microsoft.entityframeworkcore.sqlserver/7.0.0-preview.2.22153.1",
+      "path": "microsoft.entityframeworkcore.sqlserver/7.0.0-preview.3.22175.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Icon.png",
         "lib/net6.0/Microsoft.EntityFrameworkCore.SqlServer.dll",
         "lib/net6.0/Microsoft.EntityFrameworkCore.SqlServer.xml",
-        "microsoft.entityframeworkcore.sqlserver.7.0.0-preview.2.22153.1.nupkg.sha512",
+        "microsoft.entityframeworkcore.sqlserver.7.0.0-preview.3.22175.1.nupkg.sha512",
         "microsoft.entityframeworkcore.sqlserver.nuspec"
       ]
     },
@@ -3422,6 +3431,18 @@
         "newtonsoft.json.10.0.1.nupkg.sha512",
         "newtonsoft.json.nuspec",
         "tools/install.ps1"
+      ]
+    },
+    "ReadLine/2.0.1": {
+      "sha512": "m3eptlV2hlZ3gWxdhvgsUpSjwyA3NCeLdbhgDt0V8rXP1E6ZbjOOExcAufHvAZepSKJvV+zZO1eYWGveShA4gw==",
+      "type": "package",
+      "path": "readline/2.0.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.0/ReadLine.dll",
+        "readline.2.0.1.nupkg.sha512",
+        "readline.nuspec"
       ]
     },
     "runtime.native.System/4.3.0": {
@@ -6690,10 +6711,11 @@
       "Microsoft.EntityFrameworkCore >= 7.0.0-preview.3.22175.1",
       "Microsoft.EntityFrameworkCore.Design >= 7.0.0-preview.3.22175.1",
       "Microsoft.EntityFrameworkCore.Proxies >= 6.0.4",
-      "Microsoft.EntityFrameworkCore.SqlServer >= 7.0.0-preview.2.22153.1",
+      "Microsoft.EntityFrameworkCore.SqlServer >= 7.0.0-preview.3.22175.1",
       "Microsoft.EntityFrameworkCore.Tools >= 7.0.0-preview.3.22175.1",
       "Microsoft.EntityFrameworkCore.Tools.DotNet >= 2.0.3",
       "Microsoft.Extensions.Configuration.Json >= 7.0.0-preview.3.22175.4",
+      "ReadLine >= 2.0.1",
       "TypeConvert >= 2.1.6"
     ]
   },
@@ -6754,7 +6776,7 @@
           },
           "Microsoft.EntityFrameworkCore.SqlServer": {
             "target": "Package",
-            "version": "[7.0.0-preview.2.22153.1, )"
+            "version": "[7.0.0-preview.3.22175.1, )"
           },
           "Microsoft.EntityFrameworkCore.Tools": {
             "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
@@ -6769,6 +6791,10 @@
           "Microsoft.Extensions.Configuration.Json": {
             "target": "Package",
             "version": "[7.0.0-preview.3.22175.4, )"
+          },
+          "ReadLine": {
+            "target": "Package",
+            "version": "[2.0.1, )"
           },
           "TypeConvert": {
             "target": "Package",

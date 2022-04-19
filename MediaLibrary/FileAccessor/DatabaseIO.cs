@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics;
 using ConsoleApp1.FileAccessor.Database.Context;
 using ConsoleApp1.MediaEntities;
 using Microsoft.EntityFrameworkCore;
@@ -65,26 +66,21 @@ public class DatabaseIo : IFileIo
         return db.SaveChanges() > 0;
     }
 
-    public bool UpdateMovie(Movie movie)
+    public bool UpdateMovie(Movie? movie)
     {
+        if (movie is null) return false;
         using var db = new MovieContext();
-        var dbMovie = db.Movies.Find(movie.Id);
-        if (dbMovie is not null)
-        {
-            db.Attach(movie);
-            db.Entry(movie).State = EntityState.Modified;
-        }
 
-        return db.SaveChanges() > 0;
+        db.Movies.Update(movie);
+        return db.SaveChanges() > -1;
+
     }
 
     public bool DeleteMovie(long id)
     {
         using var db = new MovieContext();
-
         var movie = new Movie() {Id = id};
-        db.Attach(movie);
-        db.Entry(movie).State = EntityState.Deleted;
+        db.Movies.Remove(movie);
         return db.SaveChanges() > 0;
     }
 
@@ -172,7 +168,8 @@ public class DatabaseIo : IFileIo
 
     public List<Genre> GetAllGenres()
     {
-        throw new NotImplementedException();
+        using var db = new MovieContext();
+        return db.Genres.ToList();
     }
 
     public List<User> GetAllUsers()

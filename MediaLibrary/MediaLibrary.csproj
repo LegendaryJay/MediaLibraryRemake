@@ -16,13 +16,14 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="6.0.4" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.0-preview.2.22153.1" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.0-preview.3.22175.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.0-preview.3.22175.1">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.3" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0-preview.3.22175.4" />
+        <PackageReference Include="ReadLine" Version="2.0.1" />
         <PackageReference Include="TypeConvert" Version="2.1.6" />
     </ItemGroup>
 

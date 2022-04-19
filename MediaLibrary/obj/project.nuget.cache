@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "7DoN+7c5XTQvHv2/9/uHKPzSowBHITknbYzxod9pgDm6QV9MUUHl1d0NkDEgmYtuedg4b3QzqpQAzm/Imx0Q4Q==",
+  "dgSpecHash": "vypgiyw6U69bBbafkwXaq+eCDtVtWUyyRsqQeydpseyp5V9SOsy402zE9meMkqrIhqsqEhmlXuWiQWRzNu+MLQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\amore\\RiderProjects\\MediaLibraryRemake\\MediaLibrary\\MediaLibrary.csproj",
   "expectedPackageFiles": [
@@ -11,7 +11,7 @@
     "C:\\Users\\amore\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\amore\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.0.0\\microsoft.bcl.asyncinterfaces.1.0.0.nupkg.sha512",
     "C:\\Users\\amore\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
-    "C:\\Users\\amore\\.nuget\\packages\\microsoft.data.sqlclient\\4.0.1\\microsoft.data.sqlclient.4.0.1.nupkg.sha512",
+    "C:\\Users\\amore\\.nuget\\packages\\microsoft.data.sqlclient\\4.1.0\\microsoft.data.sqlclient.4.1.0.nupkg.sha512",
     "C:\\Users\\amore\\.nuget\\packages\\microsoft.data.sqlclient.sni.runtime\\4.0.0\\microsoft.data.sqlclient.sni.runtime.4.0.0.nupkg.sha512",
     "C:\\Users\\amore\\.nuget\\packages\\microsoft.entityframeworkcore\\7.0.0-preview.3.22175.1\\microsoft.entityframeworkcore.7.0.0-preview.3.22175.1.nupkg.sha512",
     "C:\\Users\\amore\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\7.0.0-preview.3.22175.1\\microsoft.entityframeworkcore.abstractions.7.0.0-preview.3.22175.1.nupkg.sha512",
@@ -19,7 +19,7 @@
     "C:\\Users\\amore\\.nuget\\packages\\microsoft.entityframeworkcore.design\\7.0.0-preview.3.22175.1\\microsoft.entityframeworkcore.design.7.0.0-preview.3.22175.1.nupkg.sha512",
     "C:\\Users\\amore\\.nuget\\packages\\microsoft.entityframeworkcore.proxies\\6.0.4\\microsoft.entityframeworkcore.proxies.6.0.4.nupkg.sha512",
     "C:\\Users\\amore\\.nuget\\packages\\microsoft.entityframeworkcore.relational\\7.0.0-preview.3.22175.1\\microsoft.entityframeworkcore.relational.7.0.0-preview.3.22175.1.nupkg.sha512",
-    "C:\\Users\\amore\\.nuget\\packages\\microsoft.entityframeworkcore.sqlserver\\7.0.0-preview.2.22153.1\\microsoft.entityframeworkcore.sqlserver.7.0.0-preview.2.22153.1.nupkg.sha512",
+    "C:\\Users\\amore\\.nuget\\packages\\microsoft.entityframeworkcore.sqlserver\\7.0.0-preview.3.22175.1\\microsoft.entityframeworkcore.sqlserver.7.0.0-preview.3.22175.1.nupkg.sha512",
     "C:\\Users\\amore\\.nuget\\packages\\microsoft.entityframeworkcore.tools\\7.0.0-preview.3.22175.1\\microsoft.entityframeworkcore.tools.7.0.0-preview.3.22175.1.nupkg.sha512",
     "C:\\Users\\amore\\.nuget\\packages\\microsoft.entityframeworkcore.tools.dotnet\\2.0.3\\microsoft.entityframeworkcore.tools.dotnet.2.0.3.nupkg.sha512",
     "C:\\Users\\amore\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\7.0.0-preview.3.22175.4\\microsoft.extensions.caching.abstractions.7.0.0-preview.3.22175.4.nupkg.sha512",
@@ -55,6 +55,7 @@
     "C:\\Users\\amore\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
     "C:\\Users\\amore\\.nuget\\packages\\netstandard.library\\2.0.1\\netstandard.library.2.0.1.nupkg.sha512",
     "C:\\Users\\amore\\.nuget\\packages\\newtonsoft.json\\10.0.1\\newtonsoft.json.10.0.1.nupkg.sha512",
+    "C:\\Users\\amore\\.nuget\\packages\\readline\\2.0.1\\readline.2.0.1.nupkg.sha512",
     "C:\\Users\\amore\\.nuget\\packages\\runtime.native.system\\4.3.0\\runtime.native.system.4.3.0.nupkg.sha512",
     "C:\\Users\\amore\\.nuget\\packages\\system.buffers\\4.5.1\\system.buffers.4.5.1.nupkg.sha512",
     "C:\\Users\\amore\\.nuget\\packages\\system.codedom\\4.4.0\\system.codedom.4.4.0.nupkg.sha512",

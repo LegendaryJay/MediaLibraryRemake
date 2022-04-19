@@ -90,3 +90,4 @@ C:\Users\amore\RiderProjects\MediaLibraryRemake\MediaLibrary\bin\Debug\net7.0\Fi
 C:\Users\amore\RiderProjects\MediaLibraryRemake\MediaLibrary\bin\Debug\net7.0\Files\SQL\6-7-InsertRatings.sql
 C:\Users\amore\RiderProjects\MediaLibraryRemake\MediaLibrary\bin\Debug\net7.0\Files\SQL\6-8-InsertRatings.sql
 C:\Users\amore\RiderProjects\MediaLibraryRemake\MediaLibrary\bin\Debug\net7.0\Files\SQL\6-9-InsertRatings.sql
+C:\Users\amore\RiderProjects\MediaLibraryRemake\MediaLibrary\bin\Debug\net7.0\ReadLine.dll
