@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using ConsoleApp1.FileAccessor.Database.Context;
 using ConsoleApp1.MediaEntities;
 using Microsoft.EntityFrameworkCore;
@@ -65,6 +66,14 @@ public class DatabaseIo : IFileIo
     public bool AddMovie(Movie movie)
     {
         using var db = new MovieContext();
+        // db.Genres.Where(x => movie.MovieGenres. x.Id))
+        // Movie newmovie = new()
+        // {
+        //     Title = movie.Title,
+        //     ReleaseDate = movie.ReleaseDate,
+        //     MovieGenres = movie.MovieGenres.,
+        //     UserMovies = null
+        // };
         db.Add(movie);
 
         return db.SaveChanges() > 0;
