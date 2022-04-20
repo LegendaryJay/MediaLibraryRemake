@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
+using System.Linq;
 using ConsoleApp1.FileAccessor.Database.Context;
 using ConsoleApp1.MediaEntities;
 using Microsoft.EntityFrameworkCore;
@@ -51,12 +52,14 @@ public class DatabaseIo : IFileIo
 
     public List<Movie> GetAllMovies()
     {
-        using var db = new MovieContext();
-        return db.Movies
-            .Include(c => c.MovieGenres)
-            .ThenInclude(x => x.Genre)
-            .Include(x => x.UserMovies)
-            .ToList();
+        using (var db = new MovieContext())
+        {
+            return db.Movies
+                .Include(c => c.MovieGenres)
+                .ThenInclude(x => x.Genre)
+                .Include(x => x.UserMovies)
+                .ToList();
+        }
     }
 
     public bool AddMovie(Movie movie)
@@ -71,9 +74,27 @@ public class DatabaseIo : IFileIo
         if (movie is null) return false;
         using var db = new MovieContext();
 
-        db.Movies.Update(movie);
-        return db.SaveChanges() > -1;
+        var original = db.Movies
+            .Include(x => x.MovieGenres)
+            .FirstOrDefault(x => movie.Id == x.Id);
+        if (original == null) return false;
+        original.Title = movie.Title;
+        original.ReleaseDate = movie.ReleaseDate;
+        
+        
+        //this is stupid but I've worked for about 10 hours today just trying to solve this problem.
+        //Why did this work? Why didnt other methods work???
+        original.MovieGenres =
+            movie.MovieGenres
+                .Where(
+                    x => movie.MovieGenres
+                        .Select(
+                            y => y.Genre.Id
+                        )
+                        .Contains(x.Genre.Id)).ToList();
 
+        foreach (var genre in movie.MovieGenres) original.MovieGenres.Add(genre);
+        return db.SaveChanges() > -1;
     }
 
     public bool DeleteMovie(long id)
@@ -140,11 +161,11 @@ public class DatabaseIo : IFileIo
             .ThenBy(x => x.Title)
             .ToList();
     }
-    
+
 
     public List<Movie> BestMovieByOccupation()
     {
-         using var db = new MovieContext();
+        using var db = new MovieContext();
         // return db.Users
         //     .Include(x => x.UserMovies)
         //     .ThenInclude(x => x.Movie)

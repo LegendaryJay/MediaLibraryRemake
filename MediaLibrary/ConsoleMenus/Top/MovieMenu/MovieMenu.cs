@@ -1,4 +1,5 @@
 using ConsoleApp1.ConsoleMenus.Multi_purpose;
+using ConsoleApp1.ConsoleMenus.Top.MovieMenu.MovieEditMenu;
 using ConsoleApp1.FileAccessor;
 using ConsoleApp1.MediaEntities;
 using ConsoleTools;
@@ -9,17 +10,19 @@ public class MovieMenu : DisplayBase<Movie>
 {
     protected override void RunOnClick(ConsoleMenu thisMenu)
     {
-        var movie = GetItem(thisMenu.CurrentItem.Index - 1);
-        if (movie is not null)
-        {
-            new EditMenu(movie).Run();
-        }
+        var index = thisMenu.CurrentItem.Index - 1;
+        var movie = GetItem(index);
+        if (movie is null) return;
+        new EditMenu(movie).Run();
+        thisMenu.CurrentItem.Name = DisplayMenuName(index);
+
+
     }
 
     public MovieMenu() : base(FileIoSingleton.Instance.FileIo.GetAllMovies(), "Movie Menu", 1)
     {
         ThisMenu
-            .Add("Add", () => { })
+            .Add("Add", () => new EditMenu().Run())
             .Add("Sort", () => { })
             .Add("Filter", () => { })
             .Add("Analyze", () => { });

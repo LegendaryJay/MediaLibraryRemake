@@ -11,7 +11,7 @@ public class Movie
 
     public string ToShortString()
     {
-        return $"{Id}: {Title}";
+        return $"{Id}: {Title} \t\t[{UserMovies.Select(x => x.Rating).Average():0.00} / 5]";
     }
     public string ToPrettyString()
     {

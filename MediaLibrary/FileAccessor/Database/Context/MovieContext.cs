@@ -20,7 +20,9 @@ public class MovieContext : DbContext
             .AddJsonFile("appsettings.json")
             .Build();
 
-        optionsBuilder.UseLazyLoadingProxies().UseSqlServer(configuration.GetConnectionString("MovieContext")!);
+        optionsBuilder
+//            .UseEadLoadingProxies()
+            .UseSqlServer(configuration.GetConnectionString("MovieContext")!);
 
         //optionsBuilder.UseLazyLoadingProxies().UseSqlServer(@"Server=bitsql.wctc.edu;Database=mmcarthey_12090_Movie;User ID=mmcarthey;Password=000075813;");
     }

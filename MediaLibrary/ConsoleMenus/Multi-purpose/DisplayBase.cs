@@ -4,7 +4,7 @@ using ConsoleTools;
 public abstract class DisplayBase<T> : MenuBase
 {
     private const int ItemsPerPage = 5;
-    protected readonly List<T> _items;
+    protected readonly List<T> Items;
     private readonly int _resultCount;
     private int _page;
 
@@ -18,21 +18,22 @@ public abstract class DisplayBase<T> : MenuBase
     protected T? GetItem(int index)
     {
         var realIndex = GetItemIndex(index);
-        return realIndex < _items.Count ? _items[realIndex] : default;
+        return realIndex < Items.Count ? Items[realIndex] : default;
     }
 
     protected string DisplayMenuName(int i)
     {
         var item = GetItem(i);
         if (item is null) return "[empty]";
-        return PrependToName(i, item) + DisplayToMenu(item) + AppendToName(i, item);
+        return PrependToName(i, item) + DisplayToMenu(item) + AppendToName(i, item) +
+               (ItemsPerPage - 1 == i ? "\n" : "");;;
     }
     protected abstract void RunOnClick(ConsoleMenu thisMenu);
 
     protected DisplayBase(List<T> items, string title, int level) : base(title, level)
     {
-        _items = items;
-        _resultCount = _items.Count;
+        Items = items;
+        _resultCount = Items.Count;
         for (var i = 0; i < ItemsPerPage; i++)
         {
             ThisMenu
@@ -85,8 +86,7 @@ public abstract class DisplayBase<T> : MenuBase
         for (var i = 0; i <  ItemsPerPage; i++)
         {
             var item = GetItem(i);
-            ThisMenu.Items[i + 1].Name =  DisplayMenuName(i)  +
-                              (ItemsPerPage - 1 == i ? "\n" : "");;
+            ThisMenu.Items[i + 1].Name = DisplayMenuName(i);
 
         }
     }
