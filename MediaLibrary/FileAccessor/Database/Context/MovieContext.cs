@@ -1,4 +1,5 @@
-﻿using ConsoleApp1.MediaEntities;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using ConsoleApp1.MediaEntities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -6,6 +7,8 @@ namespace ConsoleApp1.FileAccessor.Database.Context;
 
 public class MovieContext : DbContext
 {
+    
+    [ForeignKey("Genre_Id")]
     public DbSet<Genre> Genres { get; set; }
     public DbSet<Movie> Movies { get; set; }
     public DbSet<MovieGenre> MovieGenres { get; set; }
@@ -23,7 +26,5 @@ public class MovieContext : DbContext
         optionsBuilder
 //            .UseEadLoadingProxies()
             .UseSqlServer(configuration.GetConnectionString("MovieContext")!);
-
-        //optionsBuilder.UseLazyLoadingProxies().UseSqlServer(@"Server=bitsql.wctc.edu;Database=mmcarthey_12090_Movie;User ID=mmcarthey;Password=000075813;");
     }
 }

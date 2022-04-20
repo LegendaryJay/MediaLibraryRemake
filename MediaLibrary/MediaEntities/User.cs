@@ -1,7 +1,10 @@
-﻿namespace ConsoleApp1.MediaEntities;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ConsoleApp1.MediaEntities;
 
 public class User
 {
+    [Key]
     public long Id { get; set; }
     public long Age { get; set; }
     public string Gender { get; set; }

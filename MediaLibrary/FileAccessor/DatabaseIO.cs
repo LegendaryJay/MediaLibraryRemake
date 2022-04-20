@@ -66,6 +66,7 @@ public class DatabaseIo : IFileIo
     {
         using var db = new MovieContext();
         db.Add(movie);
+
         return db.SaveChanges() > 0;
     }
 

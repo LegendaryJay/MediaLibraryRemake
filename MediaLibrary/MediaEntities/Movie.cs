@@ -1,7 +1,12 @@
-﻿namespace ConsoleApp1.MediaEntities;
+﻿
+
+using System.ComponentModel.DataAnnotations;
+
+namespace ConsoleApp1.MediaEntities;
 
 public class Movie
 {
+    [Key]
     public long Id { get; set; }
     public string Title { get; set; }
     public DateTime ReleaseDate { get; set; }
