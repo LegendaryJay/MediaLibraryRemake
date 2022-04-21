@@ -18,15 +18,14 @@ public class EditMenu : MenuBase
 
     private readonly Movie _editableMovie;
     private readonly Movie _originalMovie;
-    private readonly string actionWord;
-    private readonly bool isNew;
+    private readonly string _actionWord;
+    private  Movie? _outputMovie; 
 
     private EditMenu(bool isNew, Movie movie, string title) : base(title, 2)
     {
         Action<ConsoleMenu> onSave;
         _editableMovie = movie;
 
-        this.isNew = isNew;
         if (isNew)
         {
             _originalMovie = new Movie
@@ -35,12 +34,13 @@ public class EditMenu : MenuBase
                 ReleaseDate = DateTime.MinValue,
                 MovieGenres = new List<MovieGenres>()
             };
-            actionWord = "Add";
+            _actionWord = "Add";
             onSave = thisMenu =>
             {
                 if (ValidateMovies.ValidateMovie(movie))
                 {
                     FileIoSingleton.Instance.FileIo.AddMovie(movie);
+                    _outputMovie = movie;
                     thisMenu.CloseMenu();
                 }
                 else
@@ -51,7 +51,7 @@ public class EditMenu : MenuBase
         }
         else
         {
-            actionWord = "Edit";
+            _actionWord = "Edit";
             _originalMovie = new Movie
             {
                 Title = movie.Title,
@@ -65,9 +65,9 @@ public class EditMenu : MenuBase
             };
         }
 
-        ThisMenu.Add($"{actionWord} {MenuName[0]}", SetTitle);
-        ThisMenu.Add($"{actionWord} {MenuName[1]}", SetReleaseDate);
-        ThisMenu.Add($"{actionWord} {MenuName[2]}", SetGenres);
+        ThisMenu.Add($"{_actionWord} {MenuName[0]}", SetTitle);
+        ThisMenu.Add($"{_actionWord} {MenuName[1]}", SetReleaseDate);
+        ThisMenu.Add($"{_actionWord} {MenuName[2]}", SetGenres);
         ThisMenu.Add("Save and Exit", onSave);
     }
 
@@ -83,7 +83,7 @@ public class EditMenu : MenuBase
     {
         var extra = newValue.IsNullOrEmpty() ? "" : $" - (edited to {newValue})";
 
-        return $"{actionWord} {MenuName[index]}{extra}";
+        return $"{_actionWord} {MenuName[index]}{extra}";
     }
 
     private void OnValidate(int index, bool isChanged, string input, Action action)
@@ -102,8 +102,8 @@ public class EditMenu : MenuBase
     private void SetTitle()
     {
         ReadLine.ClearHistory();
-        ReadLine.AddHistory(_editableMovie.Title);
-        var newTitle = ReadLine.Read("Change Title to: ", _editableMovie.Title).Trim();
+        ReadLine.AddHistory(_editableMovie.Title ?? "");
+        var newTitle = ReadLine.Read("Change Title to: ").Trim();
 
         OnValidate(
             0,
@@ -116,8 +116,12 @@ public class EditMenu : MenuBase
     private void SetReleaseDate()
     {
         ReadLine.ClearHistory();
-        ReadLine.AddHistory($"{_editableMovie.ReleaseDate.Year}");
-        var newYear = ReadLine.Read("Change Release Year to: ", _editableMovie.Title).Trim();
+        if (_editableMovie.ReleaseDate != DateTime.MinValue)
+            ReadLine.AddHistory(
+                (_editableMovie.ReleaseDate != DateTime.MinValue)
+                    ? _editableMovie.ReleaseDate.Year.ToString()
+                    : DateTime.Now.Year.ToString());
+        var newYear = ReadLine.Read("Change Release Year to: ").Trim();
 
         OnValidate(
             1,
@@ -144,8 +148,16 @@ public class EditMenu : MenuBase
             () => _editableMovie.MovieGenres = genres.Select(x => new MovieGenres
             {
                 MovieId = _originalMovie.Id,
+                Movie = _originalMovie,
                 GenreId = x.Id,
+                Genre = x
             }).ToList()
         );
+    }
+
+    public void Run(out Movie? movie)
+    {
+        this.Run();
+        movie = _outputMovie;
     }
 }

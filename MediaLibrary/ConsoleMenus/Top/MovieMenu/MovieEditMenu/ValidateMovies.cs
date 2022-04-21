@@ -21,6 +21,11 @@ public static class ValidateMovies
 
     public static bool ValidateYear(string str, out DateTime year)
     {
+        if (str.Length != 4)
+        {
+            year = DateTime.MinValue;
+            return false;
+        }
         if (int.TryParse(str.Trim(), out var tempYear))
         {
             var newYear = new DateTime(tempYear, 1, 1);

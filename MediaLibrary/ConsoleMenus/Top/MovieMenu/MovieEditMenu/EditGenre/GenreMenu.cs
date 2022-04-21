@@ -18,7 +18,9 @@ public class GenreMenu : DisplayBase<GenreDummy>
         
         FileIoSingleton.Instance.FileIo.GetAllGenres().Select(x => new GenreDummy(x, false)).ToList(), "Choose Genres", 2)
     {
-        var genreList = movie?.MovieGenres.Select(x => x.Genre).ToList() ?? new List<Genre>() ;
+        movie ??= new Movie();
+        movie.MovieGenres ??= new List<MovieGenres>();
+        var genreList = movie.MovieGenres.Select(x => x.Genre).ToList();
 
         foreach (
             var genreDummy in IndexTracker.Items.Where(x => genreList.Any(g => g.Id == x.Id))

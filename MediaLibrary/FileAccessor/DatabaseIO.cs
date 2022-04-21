@@ -2,6 +2,7 @@
 using ConsoleApp1.FileAccessor.Database.Context;
 using ConsoleApp1.MediaEntities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 
 namespace ConsoleApp1.FileAccessor;
 
@@ -50,30 +51,42 @@ public class DatabaseIo : IFileIo
 
     public List<Movie> GetAllMovies()
     {
-        using (var db = new MovieContext())
-        {
-            return db.Movies
-                .Include(x => x.MovieGenres)
-                .ThenInclude(x => x.Genre)
-                .Include(x => x.UserMovies)
-                .ToList();
-        }
+        using var db = new MovieContext();
+        return db.Movies
+            .Include(x => x.MovieGenres)
+            .ThenInclude(x => x.Genre)
+            .Include(x => x.UserMovies)
+            .ToList();
     }
 
     public bool AddMovie(Movie movie)
     {
+        if (movie is null) return false;
         using var db = new MovieContext();
-        // db.Genres.Where(x => movie.MovieGenres. x.Id))
-        // Movie newmovie = new()
-        // {
-        //     Title = movie.Title,
-        //     ReleaseDate = movie.ReleaseDate,
-        //     MovieGenres = movie.MovieGenres.,
-        //     UserMovies = null
-        // };
-        db.Add(movie);
 
-        return db.SaveChanges() > 0;
+        var original = new Movie();
+
+        original.Id = movie.Id;
+        original.Title = movie.Title;
+
+        db.Add(original);
+
+        var isSuccessful = db.SaveChanges() > -1;
+
+        movie.Id = original.Id;
+        original.MovieGenres = new List<MovieGenres>();
+        foreach (var genre in movie.MovieGenres)
+        {
+            original.MovieGenres.Add(
+                new MovieGenres
+                {
+                    MovieId = original.Id,
+                    GenreId = genre.GenreId,
+                }
+            );
+        }
+
+        return db.SaveChanges() > -1 && isSuccessful;
     }
 
     public bool UpdateMovie(Movie? movie)

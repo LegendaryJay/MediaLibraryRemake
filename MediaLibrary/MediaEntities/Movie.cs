@@ -12,9 +12,19 @@ public class Movie
     public virtual ICollection<MovieGenres> MovieGenres { get; set; }
     public virtual ICollection<UserMovie> UserMovies { get; set; }
 
+    private string GetRatingString()
+    {
+        var ratingSource = UserMovies;
+        var averageString = (UserMovies is null || UserMovies.Count == 0)
+            ? "?"
+            : $"{ratingSource.Select(x => x.Rating).Average():0.00}";
+
+        return averageString;
+    }
+
     public string ToShortString()
     {
-        return $"{Id}: {Title} \t\t[{UserMovies.Select(x => x.Rating).Average():0.00} / 5]";
+        return $"{Id}: {Title} \t\t[{GetRatingString()} / 5]";
     }
 
     public string ToPrettyString()
@@ -22,7 +32,7 @@ public class Movie
         return $" - Movie {Id}: {Title}" +
                $"\n\tReleased {ReleaseDate:yyyy}" +
                $"\n\tGenres: {string.Join(" - ", MovieGenres.Select(g => g.Genre.Name))}" +
-               $"\n\tRated {UserMovies.Select(x => x.Rating).Average():0.00} / 5";
+               $"\n\tRated {GetRatingString()} / 5";
     }
 }
 

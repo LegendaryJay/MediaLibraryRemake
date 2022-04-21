@@ -11,7 +11,11 @@ public class MovieMenu : DisplayBase<Movie>
     public MovieMenu() : base(FileIoSingleton.Instance.FileIo.GetAllMovies(), "Movie Menu", 1)
     {
         ThisMenu
-            .Add("Add", () => new EditMenu().Run())
+            .Add("Add", () =>
+            {
+                new EditMenu().Run(out Movie? movie);
+                if(movie is not null) IndexTracker.Items.Add(movie);
+            })
             .Add("Sort", () => { })
             .Add("Filter", () => { })
             .Add("Analyze", () => { });
