@@ -1,4 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿// @nuget: EntityFramework
+// @nuget: EntityFramework.SqlServerCompact
+// @nuget: Microsoft.SqlServer.Compact
+// @nuget: Z.EntityFramework.Extensions
+
+
 using ConsoleApp1.MediaEntities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -7,11 +12,8 @@ namespace ConsoleApp1.FileAccessor.Database.Context;
 
 public class MovieContext : DbContext
 {
-    
-    [ForeignKey("Genre_Id")]
     public DbSet<Genre> Genres { get; set; }
     public DbSet<Movie> Movies { get; set; }
-    public DbSet<MovieGenre> MovieGenres { get; set; }
     public DbSet<Occupation> Occupations { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<UserMovie> UserMovies { get; set; }
@@ -24,7 +26,25 @@ public class MovieContext : DbContext
             .Build();
 
         optionsBuilder
-//            .UseEadLoadingProxies()
+            .UseLazyLoadingProxies()
             .UseSqlServer(configuration.GetConnectionString("MovieContext")!);
     }
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder
+            .Entity<Movie>()
+            .HasMany(p => p.Genres)
+            .WithMany(p => p.Movies)
+            .UsingEntity<MovieGenres>(
+                j => j
+                    .HasOne(pt => pt.Genre)
+                    .WithMany()
+                    .HasForeignKey(pt => pt.GenreId),
+                j => j
+                    .HasOne(pt => pt.Movie)
+                    .WithMany()
+                    .HasForeignKey(pt => pt.MovieId)
+                );
+    }
+    
 }

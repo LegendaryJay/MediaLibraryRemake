@@ -1,36 +1,28 @@
+using System.Collections.Specialized;
 using ConsoleApp1.ConsoleMenus.Multi_purpose;
 using ConsoleApp1.FileAccessor;
 using ConsoleApp1.MediaEntities;
 using ConsoleTools;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace ConsoleApp1.ConsoleMenus.Top.MovieMenu.MovieEditMenu.EditGenre;
 
-public class GenreMenu : DisplayBase<Genre>
+public class GenreMenu : DisplayBase<GenreDummy>
 {
     private const string SelectedString = " * ";
-    private readonly List<bool> _activeGenres;
-    private List<Genre> _result;
+    private readonly Movie _movie;
+    private List<Genre> _output = new();
 
-    private void SaveResult()
-    {
-        _result = Enumerable.Range(0, _activeGenres.Count)
-            .Where(i => _activeGenres[i])
-            .Select(x => Items[x]  ?? throw new Exception("Null Genre"))
-            .Distinct()
-            .ToList();
-    }
 
-    public GenreMenu(Movie? movie) : base(FileIoSingleton.Instance.FileIo.GetAllGenres(), "Choose Genres", 2)
+    public GenreMenu(Movie? movie) : base(
+        FileIoSingleton.Instance.FileIo.GetAllGenres().Select(x => new GenreDummy(x, false)).ToList(), "Choose Genres", 2)
     {
-        _result = Items;
-        _activeGenres = new List<bool>(new bool[Items.Count]);
-        if (movie?.MovieGenres != null && movie.MovieGenres.Count > 0)
-        {
-            foreach (var genre in movie.MovieGenres.ToList())
-            {
-                _activeGenres[Items.FindIndex(x => x.Id == genre.Genre.Id)] = true;
-            }
-        }
+        _movie = movie ?? new Movie();
+        _movie.Genres ??= new List<Genre>();
+
+        foreach (
+            var genreDummy in IndexTracker.Items.Where(x => _movie.Genres.Any(g => g.Id == x.Id))
+        ) genreDummy.IsRecorded = true;
 
         ThisMenu.Add("Save Changes", thisMenu =>
         {
@@ -39,34 +31,42 @@ public class GenreMenu : DisplayBase<Genre>
         });
     }
 
-    protected override string PrependToName(int index, Genre item)
+    private void SaveResult()
     {
-        return _activeGenres[GetItemIndex(index)] ? SelectedString : "";
+        _output = IndexTracker.Items
+            .Where(x => x.IsRecorded)
+            .Select(x => x.Genre)
+            .ToList();
+    }
+
+    protected override string PrependToName(TrackerObject<GenreDummy?> tracker)
+    {
+        return tracker.Item!.IsRecorded ? SelectedString : "";
     }
 
 
-    private void ToggleGenre(int index)
+    private void ToggleGenre(TrackerObject<GenreDummy?> tracker)
     {
-        _activeGenres[index] = !_activeGenres[index];
+        if (!tracker.isValid) return;
+        tracker.Item!.IsRecorded = !tracker.Item.IsRecorded;
     }
 
-    protected override string DisplayToMenu(Genre item)
+    protected override string DisplayToMenu(TrackerObject<GenreDummy?> tracker)
     {
-        return item.Name;
+        return tracker.Item?.Name ?? "";
     }
 
     protected override void RunOnClick(ConsoleMenu thisMenu)
     {
-        var index = thisMenu.CurrentItem.Index - 1;
-        if (GetItemIndex(index) >= Items.Count) return;
-        ToggleGenre(GetItemIndex(index));
-        thisMenu.CurrentItem.Name = DisplayMenuName(index);
-
+        var tracker = IndexTracker.GetTrackerObject(thisMenu.CurrentItem.Index - 1);
+        if (!tracker.isValid) return;
+        ToggleGenre(tracker);
+        thisMenu.CurrentItem.Name = DisplayMenuName(tracker);
     }
 
-    public void Run(out List<Genre> selectedGenres)
+    public void Run(out List<Genre> genres)
     {
         base.Run();
-        selectedGenres = _result;
+        genres = _output;
     }
 }

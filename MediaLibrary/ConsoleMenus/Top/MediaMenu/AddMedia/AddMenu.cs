@@ -1,6 +1,4 @@
-﻿
-
-namespace ConsoleApp1.ConsoleMenus.Top.MediaMenu.AddMedia;
+﻿namespace ConsoleApp1.ConsoleMenus.Top.MediaMenu.AddMedia;
 
 public class AddMenu
 {

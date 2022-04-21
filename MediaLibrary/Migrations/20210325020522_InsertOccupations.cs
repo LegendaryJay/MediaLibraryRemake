@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
 using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace MovieLibraryOO.Migrations
+using ConsoleApp1.FileAccessor.Database.Context;
+namespace ConsoleApp1.FileAccessor.Database.Migrations
 {
     public partial class InsertOccupations : Migration
     {

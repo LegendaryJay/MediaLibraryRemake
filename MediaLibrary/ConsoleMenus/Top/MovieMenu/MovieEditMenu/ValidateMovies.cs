@@ -1,16 +1,16 @@
 using ConsoleApp1.MediaEntities;
 
-namespace ConsoleApp1.ConsoleMenus.Top.MovieMenu;
+namespace ConsoleApp1.ConsoleMenus.Top.MovieMenu.MovieEditMenu;
 
-public class ValidateMovies
+public static class ValidateMovies
 {
     public static bool ValidateTitle(string str)
     {
         if (str.Length <= 6) return false;
 
         var yearString = str.Substring(str.Length - 6);
-        return (yearString[0] == '(' && yearString[5] == ')' &&
-                int.TryParse(yearString.AsSpan(1, 4), out var year));
+        return yearString[0] == '(' && yearString[5] == ')' &&
+               int.TryParse(yearString.AsSpan(1, 4), out var year);
     }
 
     public static bool ValidateYear(string str)
@@ -35,14 +35,14 @@ public class ValidateMovies
         return false;
     }
 
-    public static bool ValidateGenres(IEnumerable<MovieGenre> mg)
+    public static bool ValidateGenres(IEnumerable<Genre> mg)
     {
         return mg.Any();
     }
 
     public static bool ValidateMovie(Movie movie)
     {
-        return ValidateTitle(movie.Title) && ValidateGenres(movie.MovieGenres) &&
+        return ValidateTitle(movie.Title) && ValidateGenres(movie.Genres) &&
                ValidateYear(movie.ReleaseDate.Year.ToString());
     }
 }

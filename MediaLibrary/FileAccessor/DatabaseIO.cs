@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.CompilerServices;
+﻿using System.Linq;
 using ConsoleApp1.FileAccessor.Database.Context;
 using ConsoleApp1.MediaEntities;
 using Microsoft.EntityFrameworkCore;
@@ -56,8 +53,7 @@ public class DatabaseIo : IFileIo
         using (var db = new MovieContext())
         {
             return db.Movies
-                .Include(c => c.MovieGenres)
-                .ThenInclude(x => x.Genre)
+                .Include(x => x.Genres)
                 .Include(x => x.UserMovies)
                 .ToList();
         }
@@ -84,33 +80,16 @@ public class DatabaseIo : IFileIo
         if (movie is null) return false;
         using var db = new MovieContext();
 
-        var original = db.Movies
-            .Include(x => x.MovieGenres)
-            .FirstOrDefault(x => movie.Id == x.Id);
-        if (original == null) return false;
-        original.Title = movie.Title;
-        original.ReleaseDate = movie.ReleaseDate;
-        
-        
-        //this is stupid but I've worked for about 10 hours today just trying to solve this problem.
-        //Why did this work? Why didnt other methods work???
-        original.MovieGenres =
-            movie.MovieGenres
-                .Where(
-                    x => movie.MovieGenres
-                        .Select(
-                            y => y.Genre.Id
-                        )
-                        .Contains(x.Genre.Id)).ToList();
-
-        foreach (var genre in movie.MovieGenres) original.MovieGenres.Add(genre);
+        db.Movies.Attach(movie);
+        var model = db.Entry(movie).State = EntityState.Modified;
         return db.SaveChanges() > -1;
+        
     }
 
     public bool DeleteMovie(long id)
     {
         using var db = new MovieContext();
-        var movie = new Movie() {Id = id};
+        var movie = new Movie {Id = id};
         db.Movies.Remove(movie);
         return db.SaveChanges() > 0;
     }
@@ -120,8 +99,7 @@ public class DatabaseIo : IFileIo
     {
         using var db = new MovieContext();
         return db.Movies
-            .Include(c => c.MovieGenres)
-            .ThenInclude(x => x.Genre)
+            .Include(c => c.Genres)
             .Include(x => x.UserMovies)
             .Where(x => x.Title.Contains(str))
             .ToList();
@@ -132,18 +110,15 @@ public class DatabaseIo : IFileIo
         using var db = new MovieContext();
         var allowedVariables = db.Genres.Where(x => x.Name.Contains(str));
         if (allowedVariables.Any())
-        {
             return db.Movies
-                .Include(c => c.MovieGenres)
-                .ThenInclude(x => x.Genre)
+                .Include(c => c.Genres)
                 .Include(x => x.UserMovies)
                 .Where(
-                    x => x.MovieGenres.Any(
-                        y => allowedVariables.Contains(y.Genre)
+                    x => x.Genres.Any(
+                        y => allowedVariables.Contains(y)
                     )
                 )
                 .ToList();
-        }
 
         return new List<Movie>();
     }
@@ -152,8 +127,7 @@ public class DatabaseIo : IFileIo
     {
         using var db = new MovieContext();
         return db.Movies
-            .Include(c => c.MovieGenres)
-            .ThenInclude(x => x.Genre)
+            .Include(c => c.Genres)
             .Include(x => x.UserMovies)
             .Where(x => Equals(x.ReleaseDate, year))
             .ToList();
@@ -163,8 +137,7 @@ public class DatabaseIo : IFileIo
     {
         using var db = new MovieContext();
         return db.Movies
-            .Include(c => c.MovieGenres)
-            .ThenInclude(x => x.Genre)
+            .Include(c => c.Genres)
             .Include(x => x.UserMovies)
             .Where(x => x.UserMovies.Average(y => y.Rating) > rating)
             .OrderByDescending(x => x.UserMovies.Average(y => y.Rating))
@@ -186,8 +159,7 @@ public class DatabaseIo : IFileIo
         //     .O(x => x.UserMovies.Average(y => y.Rating))
         //     .SelectMany(x => x.Take(1))
         return db.Movies
-            .Include(c => c.MovieGenres)
-            .ThenInclude(x => x.Genre)
+            .Include(c => c.Genres)
             .Include(x => x.UserMovies)
             .ThenInclude(x => x.User)
             .GroupBy(x => x.UserMovies.Select(y => y.User.Occupation))

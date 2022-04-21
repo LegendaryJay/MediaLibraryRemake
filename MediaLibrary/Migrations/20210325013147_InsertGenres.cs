@@ -2,9 +2,8 @@
 using System.IO;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace MovieLibraryOO.Migrations
+namespace ConsoleApp1.FileAccessor.Database.Migrations
 {
-    
     public partial class InsertGenres : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

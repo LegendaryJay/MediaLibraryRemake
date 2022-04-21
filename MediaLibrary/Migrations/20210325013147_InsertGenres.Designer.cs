@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace MovieLibraryOO.Migrations
+namespace ConsoleApp1.FileAccessor.Database.Migrations
 {
     [DbContext(typeof(MovieContext))]
     [Migration("20210325013147_InsertGenres")]

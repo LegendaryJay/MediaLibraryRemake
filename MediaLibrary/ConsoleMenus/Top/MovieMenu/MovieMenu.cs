@@ -8,17 +8,6 @@ namespace ConsoleApp1.ConsoleMenus.Top.MovieMenu;
 
 public class MovieMenu : DisplayBase<Movie>
 {
-    protected override void RunOnClick(ConsoleMenu thisMenu)
-    {
-        var index = thisMenu.CurrentItem.Index - 1;
-        var movie = GetItem(index);
-        if (movie is null) return;
-        new EditMenu(movie).Run();
-        thisMenu.CurrentItem.Name = DisplayMenuName(index);
-
-
-    }
-
     public MovieMenu() : base(FileIoSingleton.Instance.FileIo.GetAllMovies(), "Movie Menu", 1)
     {
         ThisMenu
@@ -28,8 +17,16 @@ public class MovieMenu : DisplayBase<Movie>
             .Add("Analyze", () => { });
     }
 
-    protected override string DisplayToMenu(Movie item)
+    protected override void RunOnClick(ConsoleMenu thisMenu)
     {
-        return item.ToShortString();
+        var tracker =IndexTracker.GetTrackerObject(thisMenu.CurrentItem.Index - 1);
+        if (!tracker.isValid) return;
+        new EditMenu(tracker.Item!).Run();
+        thisMenu.CurrentItem.Name = DisplayMenuName(tracker);
+    }
+
+    protected override string DisplayToMenu(TrackerObject<Movie?> tracker)
+    {
+        return tracker.Item!.ToShortString();
     }
 }

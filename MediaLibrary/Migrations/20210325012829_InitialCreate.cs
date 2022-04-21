@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace MovieLibraryOO.Migrations
+namespace ConsoleApp1.FileAccessor.Database.Migrations
 {
     public partial class InitialCreate : Migration
     {

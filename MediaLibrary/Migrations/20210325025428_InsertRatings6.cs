@@ -2,7 +2,7 @@
 using System.IO;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace MovieLibraryOO.Migrations
+namespace ConsoleApp1.FileAccessor.Database.Migrations
 {
     public partial class InsertRatings6 : Migration
     {

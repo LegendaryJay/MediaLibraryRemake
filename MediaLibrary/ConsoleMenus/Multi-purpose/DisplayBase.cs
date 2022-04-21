@@ -1,76 +1,62 @@
-namespace ConsoleApp1.ConsoleMenus.Multi_purpose;
 using ConsoleTools;
+
+namespace ConsoleApp1.ConsoleMenus.Multi_purpose;
 
 public abstract class DisplayBase<T> : MenuBase
 {
     private const int ItemsPerPage = 5;
-    protected readonly List<T> Items;
-    private readonly int _resultCount;
-    private int _page;
 
-    protected abstract string DisplayToMenu(T item);
-
-    protected int GetItemIndex(int index)
-    {
-        return index + _page * ItemsPerPage;
-    }
-
-    protected T? GetItem(int index)
-    {
-        var realIndex = GetItemIndex(index);
-        return realIndex < Items.Count ? Items[realIndex] : default;
-    }
-
-    protected string DisplayMenuName(int i)
-    {
-        var item = GetItem(i);
-        if (item is null) return "[empty]";
-        return PrependToName(i, item) + DisplayToMenu(item) + AppendToName(i, item) +
-               (ItemsPerPage - 1 == i ? "\n" : "");;;
-    }
-    protected abstract void RunOnClick(ConsoleMenu thisMenu);
+    protected readonly ItemIndexTracker<T> IndexTracker;
 
     protected DisplayBase(List<T> items, string title, int level) : base(title, level)
     {
-        Items = items;
-        _resultCount = Items.Count;
+        IndexTracker = new ItemIndexTracker<T>(items, ItemsPerPage);
         for (var i = 0; i < ItemsPerPage; i++)
-        {
             ThisMenu
                 .Add("Item " + i, RunOnClick);
-        }
 
         ThisMenu
             .Add("Previous", Previous)
             .Add("Next\n", Next);
     }
 
-    private void ChangePage(int direction)
+    protected abstract string DisplayToMenu(TrackerObject<T?> item);
+
+    
+    protected string DisplayMenuName(TrackerObject<T?> tracker)
     {
-        _page = (_page + direction + GetPageCount()) % GetPageCount();
-        UpdatePage();
+        if (tracker.Item is null) return "[empty]";
+        return PrependToName(tracker) + DisplayToMenu(tracker) + AppendToName(tracker) +
+               (ItemsPerPage - 1 == tracker.LocalIndex ? "\n" : "");
+        ;
+        ;
     }
+
+    protected abstract void RunOnClick(ConsoleMenu thisMenu);
 
     private void Next()
     {
-        ChangePage(1);
+        IndexTracker.Next();
+        UpdatePage();
     }
 
     private void Previous()
     {
-        ChangePage(-1);
+        IndexTracker.Previous();
+        UpdatePage();
     }
 
     private int GetPageCount()
     {
-        return Math.Max(1, (int) Math.Ceiling(_resultCount / (double) ItemsPerPage));
+        return Math.Max(1, (int) Math.Ceiling(IndexTracker.Items.Count / (double) ItemsPerPage));
     }
 
-    protected virtual string AppendToName(int index, T item)
+    protected virtual string AppendToName(TrackerObject<T?> localIndex)
     {
         return "";
     }
-    protected virtual string PrependToName(int index, T item)
+
+    protected virtual string PrependToName(TrackerObject<T?> localIndex)
     {
         return "";
     }
@@ -80,14 +66,12 @@ public abstract class DisplayBase<T> : MenuBase
         ThisMenu.Configure(config =>
             {
                 config.WriteHeaderAction = () =>
-                    Console.WriteLine($"Page {_page + 1} / {GetPageCount()}\n{_resultCount} items found");
+                    Console.WriteLine($"Page {IndexTracker.CurrentPage + 1} / {GetPageCount()}\n{IndexTracker.Items.Count} items found");
             }
         );
-        for (var i = 0; i <  ItemsPerPage; i++)
+        for (var i = 0; i < ItemsPerPage; i++)
         {
-            var item = GetItem(i);
-            ThisMenu.Items[i + 1].Name = DisplayMenuName(i);
-
+            ThisMenu.Items[i + 1].Name = DisplayMenuName(IndexTracker.GetTrackerObject(i));
         }
     }
 
