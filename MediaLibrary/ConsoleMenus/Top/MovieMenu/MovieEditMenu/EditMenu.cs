@@ -33,7 +33,7 @@ public class EditMenu : MenuBase
             {
                 Title = "",
                 ReleaseDate = DateTime.MinValue,
-                Genres = new List<Genre>()
+                MovieGenres = new List<MovieGenres>()
             };
             actionWord = "Add";
             onSave = thisMenu =>
@@ -56,7 +56,7 @@ public class EditMenu : MenuBase
             {
                 Title = movie.Title,
                 ReleaseDate = movie.ReleaseDate,
-                Genres = movie.Genres
+                MovieGenres = movie.MovieGenres
             };
             onSave = thisMenu =>
             {
@@ -134,14 +134,18 @@ public class EditMenu : MenuBase
         OnValidate(
             2,
             ValidateMovies.ValidateGenres(genres)
-            && (genres.Count != _originalMovie.Genres.Count
+            && (genres.Count != _originalMovie.MovieGenres.Count
                 || !genres.Select(x => x.Id)
                     .All(
-                        x => _originalMovie.Genres.Select(y => y.Id).Contains(x)
+                        x => _originalMovie.MovieGenres.Select(y => y.GenreId).Contains(x)
                     )
             ),
             string.Join(" ,", genres.Select(x => x.Name)),
-            () => _editableMovie.Genres = genres
+            () => _editableMovie.MovieGenres = genres.Select(x => new MovieGenres
+            {
+                MovieId = _originalMovie.Id,
+                GenreId = x.Id,
+            }).ToList()
         );
     }
 }

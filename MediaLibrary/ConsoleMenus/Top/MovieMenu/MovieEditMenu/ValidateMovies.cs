@@ -42,7 +42,7 @@ public static class ValidateMovies
 
     public static bool ValidateMovie(Movie movie)
     {
-        return ValidateTitle(movie.Title) && ValidateGenres(movie.Genres) &&
+        return ValidateTitle(movie.Title) && ValidateGenres(movie.MovieGenres.Select(x => x.Genre)) &&
                ValidateYear(movie.ReleaseDate.Year.ToString());
     }
 }

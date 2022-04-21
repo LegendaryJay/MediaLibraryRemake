@@ -10,18 +10,18 @@ namespace ConsoleApp1.ConsoleMenus.Top.MovieMenu.MovieEditMenu.EditGenre;
 public class GenreMenu : DisplayBase<GenreDummy>
 {
     private const string SelectedString = " * ";
-    private readonly Movie _movie;
     private List<Genre> _output = new();
 
 
+
     public GenreMenu(Movie? movie) : base(
+        
         FileIoSingleton.Instance.FileIo.GetAllGenres().Select(x => new GenreDummy(x, false)).ToList(), "Choose Genres", 2)
     {
-        _movie = movie ?? new Movie();
-        _movie.Genres ??= new List<Genre>();
+        var genreList = movie?.MovieGenres.Select(x => x.Genre).ToList() ?? new List<Genre>() ;
 
         foreach (
-            var genreDummy in IndexTracker.Items.Where(x => _movie.Genres.Any(g => g.Id == x.Id))
+            var genreDummy in IndexTracker.Items.Where(x => genreList.Any(g => g.Id == x.Id))
         ) genreDummy.IsRecorded = true;
 
         ThisMenu.Add("Save Changes", thisMenu =>

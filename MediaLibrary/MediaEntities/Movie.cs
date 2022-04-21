@@ -9,7 +9,7 @@ public class Movie
     public string Title { get; set; }
     public DateTime ReleaseDate { get; set; }
 
-    public virtual ICollection<Genre> Genres { get; set; }
+    public virtual ICollection<MovieGenres> MovieGenres { get; set; }
     public virtual ICollection<UserMovie> UserMovies { get; set; }
 
     public string ToShortString()
@@ -21,7 +21,7 @@ public class Movie
     {
         return $" - Movie {Id}: {Title}" +
                $"\n\tReleased {ReleaseDate:yyyy}" +
-               $"\n\tGenres: {string.Join(" - ", Genres.Select(g => g.Name))}" +
+               $"\n\tGenres: {string.Join(" - ", MovieGenres.Select(g => g.Genre.Name))}" +
                $"\n\tRated {UserMovies.Select(x => x.Rating).Average():0.00} / 5";
     }
 }

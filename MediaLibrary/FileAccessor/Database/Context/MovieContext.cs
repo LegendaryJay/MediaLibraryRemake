@@ -29,22 +29,24 @@ public class MovieContext : DbContext
             .UseLazyLoadingProxies()
             .UseSqlServer(configuration.GetConnectionString("MovieContext")!);
     }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder
-            .Entity<Movie>()
-            .HasMany(p => p.Genres)
-            .WithMany(p => p.Movies)
-            .UsingEntity<MovieGenres>(
-                j => j
-                    .HasOne(pt => pt.Genre)
-                    .WithMany()
-                    .HasForeignKey(pt => pt.GenreId),
-                j => j
-                    .HasOne(pt => pt.Movie)
-                    .WithMany()
-                    .HasForeignKey(pt => pt.MovieId)
-                );
+        // modelBuilder
+        //     .Entity<MovieGenres>()
+        //     .HasKey(mg => new
+        //         {
+        //              mg.MovieId,
+        //             mg.GenreId
+        //         }
+        //     );
+        // modelBuilder.Entity<MovieGenres>()
+        //     .HasOne(mg => mg.Movie)
+        //     .WithMany()
+        //     .HasForeignKey(mg => mg.MovieId);
+        // modelBuilder.Entity<MovieGenres>()
+        //     .HasOne(mg => mg.Genre)
+        //     .WithMany()
+        //     .HasForeignKey(mg => mg.GenreId);
     }
-    
 }

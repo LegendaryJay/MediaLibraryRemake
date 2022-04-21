@@ -160,13 +160,13 @@ namespace ConsoleApp1.FileAccessor.Database.Migrations
             modelBuilder.Entity("ConsoleApp1.MediaEntities.MovieGenres", b =>
                 {
                     b.HasOne("ConsoleApp1.MediaEntities.Genre", "Genre")
-                        .WithMany()
+                        .WithMany("MovieGenres")
                         .HasForeignKey("GenreId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ConsoleApp1.MediaEntities.Movie", "Movie")
-                        .WithMany()
+                        .WithMany("MovieGenres")
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -206,8 +206,15 @@ namespace ConsoleApp1.FileAccessor.Database.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("ConsoleApp1.MediaEntities.Genre", b =>
+                {
+                    b.Navigation("MovieGenres");
+                });
+
             modelBuilder.Entity("ConsoleApp1.MediaEntities.Movie", b =>
                 {
+                    b.Navigation("MovieGenres");
+
                     b.Navigation("UserMovies");
                 });
 
