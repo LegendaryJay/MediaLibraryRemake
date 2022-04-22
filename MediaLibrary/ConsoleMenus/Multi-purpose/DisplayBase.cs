@@ -61,7 +61,7 @@ public abstract class DisplayBase<T> : MenuBase
         return "";
     }
 
-    private void UpdatePage()
+    protected void UpdatePage()
     {
         ThisMenu.Configure(config =>
             {

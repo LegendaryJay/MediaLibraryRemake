@@ -19,7 +19,9 @@ public class EditMenu : MenuBase
     private readonly Movie _editableMovie;
     private readonly Movie _originalMovie;
     private readonly string _actionWord;
-    private  Movie? _outputMovie; 
+    private Movie? _outputMovie;
+
+    private ItemIndexTracker<Movie> indexTracker;
 
     private EditMenu(bool isNew, Movie movie, string title) : base(title, 2)
     {
@@ -68,11 +70,26 @@ public class EditMenu : MenuBase
         ThisMenu.Add($"{_actionWord} {MenuName[0]}", SetTitle);
         ThisMenu.Add($"{_actionWord} {MenuName[1]}", SetReleaseDate);
         ThisMenu.Add($"{_actionWord} {MenuName[2]}", SetGenres);
+        ThisMenu.Add($"!!Delete!!", (thisMenu) =>
+            {
+                new VerifyMenu(
+                    "Are you sure you want to Delete " + movie.Title + "?",
+                    2,
+                    () =>
+                    {
+                        FileIoSingleton.Instance.FileIo.DeleteMovie(movie.Id);
+                        indexTracker?.Items.Remove(movie);
+                    }
+                ).Run();
+                ThisMenu.CloseMenu();
+            }
+        );
         ThisMenu.Add("Save and Exit", onSave);
     }
 
-    public EditMenu(Movie movie) : this(false, movie, movie.ToPrettyString())
+    public EditMenu(Movie movie, ItemIndexTracker<Movie> indexTracker) : this(false, movie, movie.ToPrettyString())
     {
+        this.indexTracker = indexTracker;
     }
 
     public EditMenu() : this(true, new Movie(), "Add New Movie")

@@ -1,3 +1,5 @@
+using System.Globalization;
+using System.Xml;
 using ConsoleApp1.ConsoleMenus.Multi_purpose;
 using ConsoleApp1.ConsoleMenus.Top.MovieMenu.MovieEditMenu;
 using ConsoleApp1.FileAccessor;
@@ -14,19 +16,23 @@ public class MovieMenu : DisplayBase<Movie>
             .Add("Add", () =>
             {
                 new EditMenu().Run(out Movie? movie);
-                if(movie is not null) IndexTracker.Items.Add(movie);
+                if (movie is not null) IndexTracker.Items.Add(movie);
             })
             .Add("Sort", () => { })
             .Add("Filter", () => { })
             .Add("Analyze", () => { });
     }
 
+
+
     protected override void RunOnClick(ConsoleMenu thisMenu)
     {
-        var tracker =IndexTracker.GetTrackerObject(thisMenu.CurrentItem.Index - 1);
+        var tracker = IndexTracker.GetTrackerObject(thisMenu.CurrentItem.Index - 1);
         if (!tracker.isValid) return;
-        new EditMenu(tracker.Item!).Run();
+        new EditMenu(tracker.Item!, IndexTracker).Run();
         thisMenu.CurrentItem.Name = DisplayMenuName(tracker);
+        UpdatePage();
+
     }
 
     protected override string DisplayToMenu(TrackerObject<Movie?> tracker)
