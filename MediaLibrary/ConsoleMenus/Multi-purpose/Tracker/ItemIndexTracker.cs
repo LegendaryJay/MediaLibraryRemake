@@ -1,16 +1,18 @@
+using ConsoleApp1.MediaEntities;
+
 namespace ConsoleApp1.ConsoleMenus.Multi_purpose;
 
 public class ItemIndexTracker<T>
 {
+ 
     public List<T> Items { get; }
     public int CurrentPage;
-    public int TotalPages => (int) Math.Ceiling(Items.Count/(double) _pageLength);
-    private readonly int _pageLength;
-
+    public int TotalPages => (int) Math.Ceiling(Items.Count/(double) PageLength);
+    private const int PageLength = 5;
 
     public int GetGlobalIndex(int localIndex)
     {
-        return CurrentPage * _pageLength + localIndex;
+        return CurrentPage * PageLength + localIndex;
     }
     public T? GetItem(int localIndex)
     {
@@ -40,10 +42,9 @@ public class ItemIndexTracker<T>
         CurrentPage = (CurrentPage + direction + TotalPages) % TotalPages;
     }
 
-    public ItemIndexTracker(List<T> items, int pageLength)
+    public ItemIndexTracker(List<T> items)
     {
         Items = items;
-        _pageLength = pageLength;
     }
 
 }

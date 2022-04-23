@@ -33,6 +33,10 @@ public class GenreMenu : DisplayBase<GenreDummy>
         });
     }
 
+    public GenreMenu() : this(new Movie())
+    {
+    }
+
     private void SaveResult()
     {
         _output = IndexTracker.Items

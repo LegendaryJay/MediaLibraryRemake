@@ -10,7 +10,7 @@ public abstract class DisplayBase<T> : MenuBase
 
     protected DisplayBase(List<T> items, string title, int level) : base(title, level)
     {
-        IndexTracker = new ItemIndexTracker<T>(items, ItemsPerPage);
+        IndexTracker = new ItemIndexTracker<T>(items);
         for (var i = 0; i < ItemsPerPage; i++)
             ThisMenu
                 .Add("Item " + i, RunOnClick);
@@ -25,7 +25,7 @@ public abstract class DisplayBase<T> : MenuBase
     
     protected string DisplayMenuName(TrackerObject<T?> tracker)
     {
-        if (tracker.Item is null) return "[empty]";
+        if (tracker.Item is null) return "---";
         return PrependToName(tracker) + DisplayToMenu(tracker) + AppendToName(tracker) +
                (ItemsPerPage - 1 == tracker.LocalIndex ? "\n" : "");
         ;

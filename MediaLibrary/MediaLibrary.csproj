@@ -94,4 +94,9 @@
         </None>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="ConsoleMenus\Top\MovieMenu\Analyze" />
+      <Folder Include="ConsoleMenus\Top\MovieMenu\SortMenu" />
+    </ItemGroup>
+
 </Project>
