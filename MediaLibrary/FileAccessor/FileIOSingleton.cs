@@ -6,10 +6,10 @@ public sealed class FileIoSingleton
 
     private FileIoSingleton(IFileIo fileIo)
     {
-        FileIo = fileIo;
+        _fileIo = fileIo;
     }
 
-    public static FileIoSingleton Instance => Lazy.Value;
+    public static IFileIo FileIo => Lazy.Value._fileIo;
 
-    public IFileIo FileIo { get; init; }
+    private readonly IFileIo _fileIo;
 }

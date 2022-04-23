@@ -8,11 +8,6 @@ public interface IFileIo
     public bool AddMovie(Movie movie);
     public bool UpdateMovie(Movie movie);
     public bool DeleteMovie(long id);
-    public List<Movie> FilterMovieByTitle(string str);
-    public List<Movie> FilterMovieByGenre(List<long> indexList);
-    public List<Movie> FilterMovieByReleaseDate(int year);
-    public List<Movie> FilterMovieByRating(int rating);
-    public List<Movie> BestMovieByOccupation();
 
     public List<Genre> GetAllGenres();
 

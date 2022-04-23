@@ -8,7 +8,7 @@ namespace ConsoleApp1.ConsoleMenus.Top.MovieMenu;
 
 public class MovieMenu : DisplayBase<Movie>
 {
-    public MovieMenu() : this(FileIoSingleton.Instance.FileIo.GetAllMovies(), "Movie Menu", 1)
+    public MovieMenu() : this(FileIoSingleton.FileIo.GetAllMovies(), "Movie Menu", 1)
     {
     }
     public MovieMenu(List<Movie> movies, string title, int level) : base(movies, title, level)

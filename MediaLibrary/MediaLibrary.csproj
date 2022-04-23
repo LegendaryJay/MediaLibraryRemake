@@ -47,55 +47,11 @@
         <None Update="appsettings.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="Files\SQL\1-InsertGenres.sql">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="Files\SQL\2-InsertMovies.sql">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="Files\SQL\3-InsertOccupations.sql">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="Files\SQL\4-InsertUsers.sql">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="Files\SQL\5-InsertGenresAndMovies.sql">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="Files\SQL\6-0-InsertRatings.sql">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="Files\SQL\6-1-InsertRatings.sql">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="Files\SQL\6-2-InsertRatings.sql">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="Files\SQL\6-3-InsertRatings.sql">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="Files\SQL\6-4-InsertRatings.sql">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="Files\SQL\6-5-InsertRatings.sql">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="Files\SQL\6-6-InsertRatings.sql">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="Files\SQL\6-7-InsertRatings.sql">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="Files\SQL\6-8-InsertRatings.sql">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="Files\SQL\6-9-InsertRatings.sql">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
     </ItemGroup>
 
     <ItemGroup>
       <Folder Include="ConsoleMenus\Top\MovieMenu\Analyze" />
+      <Folder Include="!ExternalFiles" />
     </ItemGroup>
 
 </Project>

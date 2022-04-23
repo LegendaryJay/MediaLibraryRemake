@@ -16,7 +16,7 @@ public class GenreMenu : DisplayBase<GenreDummy>
 
     public GenreMenu(Movie? movie) : base(
         
-        FileIoSingleton.Instance.FileIo.GetAllGenres().Select(x => new GenreDummy(x, false)).ToList(), "Choose Genres", 2)
+        FileIoSingleton.FileIo.GetAllGenres().Select(x => new GenreDummy(x, false)).ToList(), "Choose Genres", 2)
     {
         movie ??= new Movie();
         movie.MovieGenres ??= new List<MovieGenres>();

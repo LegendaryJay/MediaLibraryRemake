@@ -41,7 +41,7 @@ public class EditMenu : MenuBase
             {
                 if (ValidateMovies.ValidateMovie(movie))
                 {
-                    FileIoSingleton.Instance.FileIo.AddMovie(movie);
+                    FileIoSingleton.FileIo.AddMovie(movie);
                     _outputMovie = movie;
                     thisMenu.CloseMenu();
                 }
@@ -62,7 +62,7 @@ public class EditMenu : MenuBase
             };
             onSave = thisMenu =>
             {
-                FileIoSingleton.Instance.FileIo.UpdateMovie(movie);
+                FileIoSingleton.FileIo.UpdateMovie(movie);
                 thisMenu.CloseMenu();
             };
         }
@@ -77,7 +77,7 @@ public class EditMenu : MenuBase
                     2,
                     () =>
                     {
-                        FileIoSingleton.Instance.FileIo.DeleteMovie(movie.Id);
+                        FileIoSingleton.FileIo.DeleteMovie(movie.Id);
                         _indexTracker?.Items.Remove(movie);
                         ThisMenu.CloseMenu();
                     }
