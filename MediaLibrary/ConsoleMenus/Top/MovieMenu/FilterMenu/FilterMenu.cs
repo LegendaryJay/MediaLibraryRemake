@@ -22,7 +22,7 @@ public class FilterMenu : MenuBase
         if (filterBy is not null)
         {
             var filterByList = filterBy.Split(null);
-            var newMovies = _movies.Where(m => filterByList.All(searchTerm => m.Title.Contains(searchTerm))).ToList();
+            var newMovies = _movies.Where(m => filterByList.All(searchTerm => m.Title.ToLower().Contains(searchTerm.ToLower()))).ToList();
             if (newMovies.Any())
             {
                 AddMovieMenuLayer($"\"{filterBy}\"", newMovies);

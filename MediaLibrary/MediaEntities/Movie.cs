@@ -17,14 +17,14 @@ public class Movie
         var ratingSource = UserMovies;
         var averageString = (UserMovies is null || UserMovies.Count == 0)
             ? "?"
-            : $"{ratingSource.Select(x => x.Rating).Average():0.00}";
+            : $"{Math.Round(ratingSource.Average(x => x.Rating), 1), -3}";
 
         return averageString;
     }
 
     public string ToShortString()
     {
-        return $"{Id}: {Title} \t\t[{GetRatingString()} / 5]";
+        return $"{Id, -5} {Title,-50}[{GetRatingString()} / 5]";
     }
 
     public string ToPrettyString()

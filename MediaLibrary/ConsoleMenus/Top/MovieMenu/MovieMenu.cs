@@ -1,6 +1,3 @@
-using System.Globalization;
-using System.Runtime.CompilerServices;
-using System.Xml;
 using ConsoleApp1.ConsoleMenus.Multi_purpose;
 using ConsoleApp1.ConsoleMenus.Top.MovieMenu.MovieEditMenu;
 using ConsoleApp1.FileAccessor;
@@ -11,23 +8,22 @@ namespace ConsoleApp1.ConsoleMenus.Top.MovieMenu;
 
 public class MovieMenu : DisplayBase<Movie>
 {
-    public string Title { get; }
-    public int Level { get; }
-
     public MovieMenu() : this(FileIoSingleton.Instance.FileIo.GetAllMovies(), "Movie Menu", 1)
     {
     }
     public MovieMenu(List<Movie> movies, string title, int level) : base(movies, title, level)
     {
-        Level = level;
-        Title = title;   
         ThisMenu
             .Add("Add", () =>
             {
                 new EditMenu().Run(out var movie);
                 if (movie is not null) IndexTracker.Items.Add(movie);
             })
-            .Add("(not implemented) Sort", () => { })
+            .Add("Sort", () =>
+            {
+                new SortMenu.SortMenu(IndexTracker, Level + 1).Run();
+                UpdatePage();
+            })
             .Add("Filter", () => { new FilterMenu.FilterMenu(IndexTracker, Title, Level).Run(); })
             .Add("(not implemented) Analyze", () => { });
     }
