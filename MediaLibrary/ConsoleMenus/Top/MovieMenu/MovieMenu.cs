@@ -8,7 +8,7 @@ namespace ConsoleApp1.ConsoleMenus.Top.MovieMenu;
 
 public class MovieMenu : DisplayBase<Movie>
 {
-    public MovieMenu() : this(FileIoSingleton.FileIo.GetAllMovies(), "Movie Menu", 1)
+    public MovieMenu(int level) : this(FileIoSingleton.FileIo.GetAllMovies(), "Movie Menu", level)
     {
     }
     public MovieMenu(List<Movie> movies, string title, int level) : base(movies, title, level)
@@ -16,7 +16,7 @@ public class MovieMenu : DisplayBase<Movie>
         ThisMenu
             .Add("Add", () =>
             {
-                new EditMenu().Run(out var movie);
+                new EditMenu(NextLevel()).Run(out var movie);
                 if (movie is not null) IndexTracker.Items.Add(movie);
             })
             .Add("Sort", () =>
@@ -34,7 +34,7 @@ public class MovieMenu : DisplayBase<Movie>
     {
         var tracker = IndexTracker.GetTrackerObject(thisMenu.CurrentItem.Index - 1);
         if (!tracker.isValid) return;
-        new EditMenu(tracker.Item!, IndexTracker).Run();
+        new EditMenu(tracker.Item!, IndexTracker, NextLevel()).Run();
         thisMenu.CurrentItem.Name = DisplayMenuName(tracker);
         UpdatePage();
 

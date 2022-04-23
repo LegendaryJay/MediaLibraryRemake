@@ -23,7 +23,7 @@ public class EditMenu : MenuBase
 
     private ItemIndexTracker<Movie> _indexTracker;
 
-    private EditMenu(bool isNew, Movie movie, string title) : base(title, 2)
+    private EditMenu(bool isNew, Movie movie, string title, int level) : base(title, level)
     {
         Action<ConsoleMenu> onSave;
         _editableMovie = movie;
@@ -88,12 +88,12 @@ public class EditMenu : MenuBase
         ThisMenu.Add("Save and Exit", onSave);
     }
 
-    public EditMenu(Movie movie, ItemIndexTracker<Movie> indexTracker) : this(false, movie, movie.ToPrettyString())
+    public EditMenu(Movie movie, ItemIndexTracker<Movie> indexTracker, int level) : this(false, movie, movie.ToPrettyString(), level)
     {
-        this._indexTracker = indexTracker;
+        _indexTracker = indexTracker;
     }
 
-    public EditMenu() : this(true, new Movie(), "Add New Movie")
+    public EditMenu(int level) : this(true, new Movie(), "Add New Movie", level)
     {
     }
 

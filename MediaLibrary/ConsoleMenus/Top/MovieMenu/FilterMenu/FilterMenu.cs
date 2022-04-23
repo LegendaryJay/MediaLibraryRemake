@@ -13,7 +13,6 @@ public class FilterMenu : MenuBase
     private const string FilterPrefix = " :";
     private const string FilterSeparator = ", ";
     private readonly string _lastTitle;
-    private readonly int _lastLevel;
     private readonly List<Movie> _movies;
 
     private void FilterByTitle()
@@ -86,19 +85,18 @@ public class FilterMenu : MenuBase
         var newTitle = _lastTitle + (_lastTitle.Contains(FilterPrefix) ? FilterSeparator : FilterPrefix) +
                        filterByString;
         ThisMenu.CloseMenu();
-        new MovieMenu(newMovies, newTitle, _lastLevel + 1).Run();
+        new MovieMenu(newMovies, newTitle, Level).Run();
     }
 
 
-    public FilterMenu(ItemIndexTracker<Movie> indexTracker, string lastTile, int lastLevel) : base("Filter Menu",
-        lastLevel + 1)
+    public FilterMenu(ItemIndexTracker<Movie> indexTracker, string lastTitle, int level) : base("Filter Menu",
+        level)
     {
-        this._lastLevel = lastLevel;
-        _lastTitle = lastTile;
+        _lastTitle = lastTitle;
         _movies = new List<Movie>(indexTracker.Items);
 
         _indexTracker = new ItemIndexTracker<Movie>(new List<Movie>(indexTracker.Items));
-        var prefix = "Filter by ";
+        const string prefix = "Filter by ";
         ThisMenu.Add(prefix + "Title", FilterByTitle)
             .Add(prefix + "Year", FilterByYear)
             .Add(prefix + "Genre", FilterByGenres);
