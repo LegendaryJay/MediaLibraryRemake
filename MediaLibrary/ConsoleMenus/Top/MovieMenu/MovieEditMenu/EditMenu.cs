@@ -1,3 +1,4 @@
+using System.Reflection;
 using Castle.Core.Internal;
 using ConsoleApp1.ConsoleMenus.Multi_purpose;
 using ConsoleApp1.ConsoleMenus.Top.MovieMenu.MovieEditMenu.EditGenre;
@@ -7,94 +8,68 @@ using ConsoleTools;
 
 namespace ConsoleApp1.ConsoleMenus.Top.MovieMenu.MovieEditMenu;
 
-public class EditMenu : MenuBase
+public abstract class BaseEditMenu : MenuBase
 {
-    private static readonly string[] MenuName =
+    private static readonly List<string> MenuTitle =
     {
         "Title",
         "Release Year",
         "Genre"
     };
 
-    private readonly Movie _editableMovie;
-    private readonly Movie _originalMovie;
+    protected void AddMenuItem(string title, Action onClick)
+    {
+        ThisMenu.Add(title, onClick);
+        MenuTitle.Add(title);
+    }
+    protected void AddMenuItem(string title, Action<ConsoleMenu> onClick)
+    {
+        ThisMenu.Add(title, onClick);
+        MenuTitle.Add(title);
+    }
+    private void Initialize()
+    {
+        foreach (var VARIABLE in COLLECTION)
+        {
+            
+        }
+        ThisMenu.Add()
+        
+    }
+    private readonly Movie _movie;
+   
+    
     private readonly string _actionWord;
-    private Movie? _outputMovie;
 
-    private ItemIndexTracker<Movie> _indexTracker;
 
-    private EditMenu(bool isNew, Movie movie, string title, int level) : base(title, level)
+    public void UpdateMovie(Movie movie)
     {
-        Action<ConsoleMenu> onSave;
-        _editableMovie = movie;
-
-        if (isNew)
-        {
-            _originalMovie = new Movie
-            {
-                Title = "",
-                ReleaseDate = DateTime.MinValue,
-                MovieGenres = new List<MovieGenres>()
-            };
-            _actionWord = "Add";
-            onSave = thisMenu =>
-            {
-                if (ValidateMovies.ValidateMovie(movie))
-                {
-                    FileIoSingleton.FileIo.AddMovie(movie);
-                    _outputMovie = movie;
-                    thisMenu.CloseMenu();
-                }
-                else
-                {
-                    thisMenu.Configure(x => x.Title = "Movie Not complete");
-                }
-            };
-        }
-        else
-        {
-            _actionWord = "Edit";
-            _originalMovie = new Movie
-            {
-                Title = movie.Title,
-                ReleaseDate = movie.ReleaseDate,
-                MovieGenres = movie.MovieGenres
-            };
-            onSave = thisMenu =>
-            {
-                FileIoSingleton.FileIo.UpdateMovie(movie);
-                thisMenu.CloseMenu();
-            };
-        }
-
-        ThisMenu.Add($"{_actionWord} {MenuName[0]}", SetTitle);
-        ThisMenu.Add($"{_actionWord} {MenuName[1]}", SetReleaseDate);
-        ThisMenu.Add($"{_actionWord} {MenuName[2]}", SetGenres);
-        ThisMenu.Add($"!!Delete!!", () =>
-            {
-                new VerifyMenu(
-                    "Are you sure you want to Delete " + movie.Title + "?",
-                    2,
-                    () =>
-                    {
-                        FileIoSingleton.FileIo.DeleteMovie(movie.Id);
-                        _indexTracker?.Items.Remove(movie);
-                        ThisMenu.CloseMenu();
-                    }
-                ).Run();
-                
-            }
-        );
-        ThisMenu.Add("Save and Exit", onSave);
+        //get movie
+        //set title/release
+        //setMovieGenres
+        //setRatings
     }
+    
+    
+    //validate
+    //ifValid, set original
 
-    public EditMenu(Movie movie, ItemIndexTracker<Movie> indexTracker, int level) : this(false, movie, movie.ToPrettyString(), level)
+    protected virtual void AddToMenuOnStartup()
     {
-        _indexTracker = indexTracker;
+        
     }
-
-    public EditMenu(int level) : this(true, new Movie(), "Add New Movie", level)
+    
+    protected abstract void SaveMovieToDatabase();
+    
+    private EditMenu(Movie movie, string title, int level) : base(title, level)
     {
+        _movie = movie;
+
+        ThisMenu.Add($"{_actionWord} Title", SetTitle);
+        ThisMenu.Add($"{_actionWord} ReleaseDate", SetReleaseDate);
+        ThisMenu.Add($"{_actionWord} Genre", SetGenres);
+        AddToMenuOnStartup();
+        ThisMenu.Add("Confirm Changes", SaveMovieToDatabase);
     }
 
     private string GetName(int index, string newValue)
@@ -104,23 +79,13 @@ public class EditMenu : MenuBase
         return $"{_actionWord} {MenuName[index]}{extra}";
     }
 
-    private void OnValidate(int index, bool isChanged, string input, Action action)
-    {
-        var displayString = "";
-        if (isChanged)
-        {
-            action();
-            displayString = input;
-        }
 
-        ThisMenu.Items[index + 1].Name = GetName(index, displayString);
-    }
-
-
+    
+    
     private void SetTitle()
     {
         ReadLine.ClearHistory();
-        ReadLine.AddHistory(_editableMovie.Title ?? "");
+        ReadLine.AddHistory(_movie.Title ?? "");
         var newTitle = ReadLine.Read("Change Title to: ").Trim();
 
         OnValidate(

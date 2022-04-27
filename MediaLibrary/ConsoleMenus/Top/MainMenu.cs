@@ -8,7 +8,7 @@ public class MainMenu : MenuBase
     {
         ThisMenu.Add("Movies", () =>
             {
-                var mediaMenu = new MovieMenu.MovieMenu(NextLevel());
+                var mediaMenu = new MediaLibrary.ConsoleMenus.Top.MovieMenu.MovieMenu(NextLevel());
                 mediaMenu.Run();
             }
         );

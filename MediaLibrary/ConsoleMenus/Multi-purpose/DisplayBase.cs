@@ -1,17 +1,77 @@
+using ConsoleApp1.ConsoleMenus.Multi_purpose;
+using ConsoleApp1.MediaEntities;
 using ConsoleTools;
 
-namespace ConsoleApp1.ConsoleMenus.Multi_purpose;
+namespace MediaLibrary.ConsoleMenus.Multi_purpose;
 
-public abstract class DisplayBase<T> : MenuBase
+public abstract class DisplayBase<T> : MenuBase where T : class
 {
-    private const int ItemsPerPage = 5;
+    protected const int PageSize = 5;
+    protected int PageIndex;
+    protected const string DisplayNameForEmptyItem = "---";
 
-    protected readonly ItemIndexTracker<T> IndexTracker;
+    protected abstract List<T> GetPageItems();
+    protected abstract int GetTotalItemsCount();
 
-    protected DisplayBase(List<T> items, string title, int level) : base(title, level)
+    protected int GetPageCount(int totalItemCount)
     {
-        IndexTracker = new ItemIndexTracker<T>(items);
-        for (var i = 0; i < ItemsPerPage; i++)
+        return (int) Math.Ceiling(totalItemCount / (double) PageSize);
+    }
+    public int UpdatePageIndex(int totalPages)
+    {
+        if (PageIndex >= totalPages)
+        {
+            PageIndex = 0;
+        }
+        else if (PageIndex < 0)
+        {
+            PageIndex = Math.Max(totalPages - 1, 0);
+        }
+
+        return PageIndex;
+    }
+
+    public void Update()
+    {
+        var itemCount = GetTotalItemsCount();
+        var totalPages = GetPageCount(itemCount);
+        UpdatePageIndex(totalPages);
+        var items = GetPageItems();
+        
+        ThisMenu.Configure(config =>
+                {
+                    config.WriteHeaderAction = () =>
+                        Console.WriteLine($"Page {PageIndex + 1} / {totalPages}\n{itemCount} items found");
+                }
+            );
+        for (var i = 0; i < PageSize; i++)
+        {
+            var item = i < items.Count ? items[i] : null;
+            ThisMenu.Items[i + 1].Name = GetMenuDisplayName(item) + 
+                (PageSize - 1 == i ? "\n" : "");
+        }
+    }
+
+    public void Next()
+    {
+        ChangePage(1);
+    }
+
+    public void Previous()
+    {
+        ChangePage(-1);
+    }
+
+    private void ChangePage(int changeDirection)
+    {
+        PageIndex += changeDirection;
+        Update();
+    }
+    
+    protected DisplayBase(string title, int level) : base(title, level)
+    {
+
+        for (var i = 0; i < PageSize; i++)
             ThisMenu
                 .Add("Item " + i, RunOnClick);
 
@@ -20,64 +80,28 @@ public abstract class DisplayBase<T> : MenuBase
             .Add("Next\n", Next);
     }
 
-    protected abstract string DisplayToMenu(TrackerObject<T?> item);
+    protected abstract string DisplayToMenu(T item);
 
-    
-    protected string DisplayMenuName(TrackerObject<T?> tracker)
+
+    protected virtual string PrependToMenuDisplayName(T item)
     {
-        if (tracker.Item is null) return "---";
-        return PrependToName(tracker) + DisplayToMenu(tracker) + AppendToName(tracker) +
-               (ItemsPerPage - 1 == tracker.LocalIndex ? "\n" : "");
-        ;
-        ;
+        return "";
+    }
+    protected virtual string AppendToMenuDisplayName(T item)
+    {
+        return "";
+    }
+    protected string GetMenuDisplayName(T? item)
+    {
+        if (item is null) return DisplayNameForEmptyItem;
+        return PrependToMenuDisplayName(item) + DisplayToMenu(item) + AppendToMenuDisplayName(item);
     }
 
     protected abstract void RunOnClick(ConsoleMenu thisMenu);
 
-    private void Next()
-    {
-        IndexTracker.Next();
-        UpdatePage();
-    }
-
-    private void Previous()
-    {
-        IndexTracker.Previous();
-        UpdatePage();
-    }
-
-    private int GetPageCount()
-    {
-        return Math.Max(1, (int) Math.Ceiling(IndexTracker.Items.Count / (double) ItemsPerPage));
-    }
-
-    protected virtual string AppendToName(TrackerObject<T?> localIndex)
-    {
-        return "";
-    }
-
-    protected virtual string PrependToName(TrackerObject<T?> localIndex)
-    {
-        return "";
-    }
-
-    protected void UpdatePage()
-    {
-        ThisMenu.Configure(config =>
-            {
-                config.WriteHeaderAction = () =>
-                    Console.WriteLine($"Page {IndexTracker.CurrentPage + 1} / {GetPageCount()}\n{IndexTracker.Items.Count} items found");
-            }
-        );
-        for (var i = 0; i < ItemsPerPage; i++)
-        {
-            ThisMenu.Items[i + 1].Name = DisplayMenuName(IndexTracker.GetTrackerObject(i));
-        }
-    }
-
     public override void Run()
     {
-        UpdatePage();
+        Update();
         base.Run();
     }
 }
