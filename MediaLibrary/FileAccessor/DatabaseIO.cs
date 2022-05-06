@@ -56,22 +56,18 @@ public class DatabaseIo : IFileIo
         ListSortDirection direction, Func<Movie, bool> where)
     {
         using var db = new MovieContext();
-        var movies = db.Movies
+
+        pageInfo.TotalItemCount = db.Movies.Where(where).Count();
+        pageInfo.Items = db.Movies
             .Include(x => x.MovieGenres)
             .ThenInclude(x => x.Genre)
             .Include(x => x.UserMovies)
-            .Where(where);
-            
-        
-
-        pageInfo.TotalItemCount = movies.Count();
-
-        var page = movies
+            .Where(where)
             .OrderByDynamic(orderBy, direction)
             .Select(p => p)
             .Skip(pageInfo.PageIndex * pageInfo.PageLength)
-            .Take(pageInfo.PageLength);
-        pageInfo.Items = page.ToList();
+            .Take(pageInfo.PageLength)
+            .ToList();
         return pageInfo;
     }
 
