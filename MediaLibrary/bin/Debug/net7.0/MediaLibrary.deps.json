@@ -109,6 +109,10 @@
         }
       },
       "EntityFramework.SqlServerCompact/6.4.4": {
+        "dependencies": {
+          "EntityFramework": "6.4.4",
+          "Microsoft.SqlServer.Compact": "4.0.8876.1"
+        },
         "runtime": {
           "lib/net45/EntityFramework.SqlServerCompact.dll": {
             "assemblyVersion": "6.0.0.0",

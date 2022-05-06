@@ -40,14 +40,14 @@ public static class ValidateMovies
         return false;
     }
 
-    public static bool ValidateGenres(IEnumerable<Genre> mg)
+    public static bool ValidateGenres(List<MovieGenres> mg)
     {
         return mg.Any();
     }
 
     public static bool ValidateMovie(Movie movie)
     {
-        return ValidateTitle(movie.Title) && ValidateGenres(movie.MovieGenres.Select(x => x.Genre)) &&
+        return ValidateTitle(movie.Title) && ValidateGenres(movie.MovieGenres.ToList()) &&
                ValidateYear(movie.ReleaseDate.Year.ToString());
     }
 }

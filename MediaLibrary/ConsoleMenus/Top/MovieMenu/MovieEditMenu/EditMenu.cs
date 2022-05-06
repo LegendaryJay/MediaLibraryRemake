@@ -1,3 +1,4 @@
+using System.Data.Entity.Infrastructure.Design;
 using Castle.Core.Internal;
 using ConsoleApp1.ConsoleMenus.Multi_purpose;
 using ConsoleApp1.ConsoleMenus.Top.MovieMenu.MovieEditMenu.EditGenre;
@@ -16,90 +17,103 @@ public class EditMenu : MenuBase
         "Genre"
     };
 
-    private readonly Movie _editableMovie;
-    private readonly Movie _originalMovie;
+    private readonly Movie _movie;
+    private readonly Movie _movieChanges;
     private readonly string _actionWord;
-    private Movie? _outputMovie;
+    private readonly Action _saveType;
 
-    private ItemIndexTracker<Movie> _indexTracker;
+    private void Update()
+    {
+        ThisMenu.Configure(config =>
+            {
+                config.WriteHeaderAction = () => Console.WriteLine(_movieChanges.ToPrettyString());
+            }
+        );
+    }
 
+    private void SaveChanges()
+    {
+        if (ValidateMovies.ValidateMovie(_movieChanges))
+        {
+            _movie.Title = _movieChanges.Title;
+            _movie.ReleaseDate = _movieChanges.ReleaseDate;
+            _movie.MovieGenres.Clear();
+            foreach (var movieGenre in _movieChanges.MovieGenres)
+            {
+                _movie.MovieGenres.Add(new MovieGenres
+                {
+                    MovieId = _movie.Id,
+                    GenreId = movieGenre.GenreId,
+                    Movie = _movie,
+                    Genre = movieGenre.Genre
+                });
+            }
+
+            _saveType();
+            ThisMenu.CloseMenu();
+        } 
+        else
+        {
+            ReadLine.Read("Movie not Valid");
+        }
+
+    }
     private EditMenu(bool isNew, Movie movie, string title, int level) : base(title, level)
     {
         Action<ConsoleMenu> onSave;
-        _editableMovie = movie;
+        _movie = movie ?? new Movie();
+        _movieChanges = new Movie
+        {
+            Id = _movie.Id,
+            Title = _movie.Title ?? "",
+            ReleaseDate = _movie.ReleaseDate,
+            MovieGenres = new List<MovieGenres>(_movie.MovieGenres ?? new List<MovieGenres>()),
+            UserMovies = new List<UserMovie>(_movie.UserMovies ?? new List<UserMovie>())
+        };
+
 
         if (isNew)
         {
-            _originalMovie = new Movie
-            {
-                Title = "",
-                ReleaseDate = DateTime.MinValue,
-                MovieGenres = new List<MovieGenres>()
-            };
             _actionWord = "Add";
-            onSave = thisMenu =>
-            {
-                if (ValidateMovies.ValidateMovie(movie))
-                {
-                    FileIoSingleton.FileIo.AddMovie(movie);
-                    _outputMovie = movie;
-                    thisMenu.CloseMenu();
-                }
-                else
-                {
-                    thisMenu.Configure(x => x.Title = "Movie Not complete");
-                }
-            };
+            _saveType = () => FileIoSingleton.FileIo.AddMovie(_movie);
         }
         else
         {
             _actionWord = "Edit";
-            _originalMovie = new Movie
-            {
-                Title = movie.Title,
-                ReleaseDate = movie.ReleaseDate,
-                MovieGenres = movie.MovieGenres
-            };
-            onSave = thisMenu =>
-            {
-                FileIoSingleton.FileIo.UpdateMovie(movie);
-                thisMenu.CloseMenu();
-            };
+            _saveType = () => FileIoSingleton.FileIo.UpdateMovie(_movie);
         }
 
-        ThisMenu.Add($"{_actionWord} {MenuName[0]}", SetTitle);
+        ThisMenu.Add($"{_actionWord} {MenuName[0]}", () => { SetTitle(); });
         ThisMenu.Add($"{_actionWord} {MenuName[1]}", SetReleaseDate);
         ThisMenu.Add($"{_actionWord} {MenuName[2]}", SetGenres);
-        ThisMenu.Add($"!!Delete!!", () =>
-            {
-                new VerifyMenu(
-                    "Are you sure you want to Delete " + movie.Title + "?",
-                    2,
-                    () =>
-                    {
-                        FileIoSingleton.FileIo.DeleteMovie(movie.Id);
-                        _indexTracker?.Items.Remove(movie);
-                        ThisMenu.CloseMenu();
-                    }
-                ).Run();
-                
-            }
-        );
-        ThisMenu.Add("Save and Exit", onSave);
-    }
-
-    public EditMenu(Movie movie, ItemIndexTracker<Movie> indexTracker, int level) : this(false, movie, movie.ToPrettyString(), level)
-    {
-        _indexTracker = indexTracker;
+        if (!isNew)
+            ThisMenu.Add($"!!Delete!!", () =>
+                {
+                    new VerifyMenu(
+                        "Are you sure you want to Delete " + movie.Title + "?",
+                        2,
+                        () =>
+                        {
+                            FileIoSingleton.FileIo.DeleteMovie(movie.Id);
+                            ThisMenu.CloseMenu();
+                        }
+                    ).Run();
+                }
+            );
+        ThisMenu.Add("Save and Exit", SaveChanges);
     }
 
     public EditMenu(int level) : this(true, new Movie(), "Add New Movie", level)
     {
     }
 
+    public EditMenu(Movie movie, int level) : this(false, movie, "Edit Movie", level)
+    {
+    }
+
     private string GetName(int index, string newValue)
     {
-        var extra = newValue.IsNullOrEmpty() ? "" : $" - (edited to {newValue})";
+        var extra = newValue.IsNullOrEmpty() ? "" : $" : {newValue}";
 
         return $"{_actionWord} {MenuName[index]}{extra}";
     }
@@ -114,68 +128,94 @@ public class EditMenu : MenuBase
         }
 
         ThisMenu.Items[index + 1].Name = GetName(index, displayString);
+        Update();
     }
 
 
     private void SetTitle()
     {
         ReadLine.ClearHistory();
-        ReadLine.AddHistory(_editableMovie.Title ?? "");
+        ReadLine.AddHistory(_movieChanges.Title ?? "");
         var newTitle = ReadLine.Read("Change Title to: ").Trim();
 
         OnValidate(
             0,
-            ValidateMovies.ValidateTitle(newTitle) && !newTitle.Equals(_originalMovie.Title),
+            ValidateMovies.ValidateTitle(newTitle) && !newTitle.Equals(_movieChanges.Title),
             newTitle,
-            () => _editableMovie.Title = newTitle
+            () => _movieChanges.Title = newTitle
+        );
+        ThisMenu.Configure(config =>
+            {
+                config.WriteHeaderAction = () => Console.WriteLine(_movieChanges.ToPrettyString());
+            }
         );
     }
 
     private void SetReleaseDate()
     {
         ReadLine.ClearHistory();
-        if (_editableMovie.ReleaseDate != DateTime.MinValue)
+        if (_movieChanges.ReleaseDate != DateTime.MinValue)
             ReadLine.AddHistory(
-                (_editableMovie.ReleaseDate != DateTime.MinValue)
-                    ? _editableMovie.ReleaseDate.Year.ToString()
+                (_movieChanges.ReleaseDate != DateTime.MinValue)
+                    ? _movieChanges.ReleaseDate.Year.ToString()
                     : DateTime.Now.Year.ToString());
         var newYear = ReadLine.Read("Change Release Year to: ").Trim();
 
         OnValidate(
             1,
-            ValidateMovies.ValidateYear(newYear, out var year) && year != _originalMovie.ReleaseDate,
+            ValidateMovies.ValidateYear(newYear, out var year) && year != _movieChanges.ReleaseDate,
             year.Year.ToString(),
-            () => _editableMovie.ReleaseDate = year
+            () => _movieChanges.ReleaseDate = year
+        );
+        ThisMenu.Configure(config =>
+            {
+                config.WriteHeaderAction = () => Console.WriteLine(_movieChanges.ToPrettyString());
+            }
         );
     }
 
     private void SetGenres()
     {
-        new GenreMenu(_editableMovie).Run(out var genres);
+        var tempMovie = new Movie
+        {
+            Id = _movieChanges.Id,
+            Title = _movieChanges.Title,
+            ReleaseDate = _movieChanges.ReleaseDate,
+            MovieGenres = new List<MovieGenres>(_movieChanges.MovieGenres),
+        };
+        new GenreMenu(tempMovie, NextLevel()).Run();
+
+        var genres = tempMovie.MovieGenres.ToList();
 
         OnValidate(
             2,
             ValidateMovies.ValidateGenres(genres)
-            && (genres.Count != _originalMovie.MovieGenres.Count
+            && (genres.Count != _movieChanges.MovieGenres.Count
                 || !genres.Select(x => x.Id)
                     .All(
-                        x => _originalMovie.MovieGenres.Select(y => y.GenreId).Contains(x)
+                        x => _movieChanges.MovieGenres.Select(y => y.GenreId).Contains(x)
                     )
             ),
-            string.Join(" ,", genres.Select(x => x.Name)),
-            () => _editableMovie.MovieGenres = genres.Select(x => new MovieGenres
+            string.Join(" ,", genres.Select(x => x.Genre.Name)),
+            () => _movieChanges.MovieGenres = genres.Select(x => new MovieGenres
             {
-                MovieId = _originalMovie.Id,
-                Movie = _originalMovie,
-                GenreId = x.Id,
-                Genre = x
+                MovieId = _movieChanges.Id,
+                Movie = _movieChanges,
+                GenreId = x.GenreId,
+                Genre = x.Genre
             }).ToList()
+        );
+        ThisMenu.Configure(config =>
+            {
+                config.WriteHeaderAction = () => Console.WriteLine(_movieChanges.ToPrettyString());
+            }
         );
     }
 
-    public void Run(out Movie? movie)
+    public override void Run()
     {
-        this.Run();
-        movie = _outputMovie;
+        Update();
+        base.Run();
+        
     }
 }

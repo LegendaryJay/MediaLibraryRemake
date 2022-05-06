@@ -92,6 +92,10 @@
       },
       "EntityFramework.SqlServerCompact/6.4.4": {
         "type": "package",
+        "dependencies": {
+          "EntityFramework": "6.4.4",
+          "Microsoft.SqlServer.Compact": "4.0.8876.1"
+        },
         "compile": {
           "lib/net45/EntityFramework.SqlServerCompact.dll": {}
         },
@@ -6841,12 +6845,14 @@
       "outputPath": "C:\\Users\\amore\\RiderProjects\\MediaLibraryRemake\\MediaLibrary\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\amore\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\amore\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {

@@ -1,10 +1,13 @@
-﻿using ConsoleApp1.MediaEntities;
+﻿using System.ComponentModel;
+using System.Linq.Expressions;
+using ConsoleApp1.MediaEntities;
 
 namespace ConsoleApp1.FileAccessor;
 
 public interface IFileIo
 {
-    public List<Movie> GetAllMovies();
+    public PageInfo<Movie> GetPageMovies(PageInfo<Movie> pageIndex, Func<Movie, object> orderBy,
+        ListSortDirection direction, Func<Movie, bool> where);
     public bool AddMovie(Movie movie);
     public bool UpdateMovie(Movie movie);
     public bool DeleteMovie(long id);

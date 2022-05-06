@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using ConsoleApp1.ConsoleMenus.Multi_purpose;
 using ConsoleApp1.ConsoleMenus.Top.MovieMenu.MovieEditMenu;
 using ConsoleApp1.FileAccessor;
@@ -8,40 +9,54 @@ namespace ConsoleApp1.ConsoleMenus.Top.MovieMenu;
 
 public class MovieMenu : DisplayBase<Movie>
 {
-    public MovieMenu(int level) : this(FileIoSingleton.FileIo.GetAllMovies(), "Movie Menu", level)
-    {
-    }
-    public MovieMenu(List<Movie> movies, string title, int level) : base(movies, title, level)
+    private string _filterToString = "";
+    private Func<Movie, object> _orderBy = movie => movie.Id;
+    private ListSortDirection _direction = ListSortDirection.Ascending;
+    private Func<Movie, bool> _where = movie => true;
+
+    public MovieMenu(int level) : base("Movie Menu", level)
     {
         ThisMenu
-            .Add("Add", () =>
-            {
-                new EditMenu(NextLevel()).Run(out var movie);
-                if (movie is not null) IndexTracker.Items.Add(movie);
-            })
-            .Add("Sort", () =>
-            {
-                new SortMenu.SortMenu(IndexTracker, Level + 1).Run();
-                UpdatePage();
-            })
-            .Add("Filter", () => { new FilterMenu.FilterMenu(IndexTracker, Title, Level).Run(); })
+            .Add("Add", AddMovie)
+            .Add("Sort", SortMovies)
+            .Add("Filter", FilterMovies)
             .Add("(not implemented) Analyze", () => { });
     }
 
-
-
-    protected override void RunOnClick(ConsoleMenu thisMenu)
+    public void AddMovie()
     {
-        var tracker = IndexTracker.GetTrackerObject(thisMenu.CurrentItem.Index - 1);
-        if (!tracker.isValid) return;
-        new EditMenu(tracker.Item!, IndexTracker, NextLevel()).Run();
-        thisMenu.CurrentItem.Name = DisplayMenuName(tracker);
+        new EditMenu(NextLevel()).Run();
         UpdatePage();
-
     }
 
-    protected override string DisplayToMenu(TrackerObject<Movie?> tracker)
+    public void SortMovies()
     {
-        return tracker.Item!.ToShortString();
+        new SortMenu.SortMenu(NextLevel()).Run(out _orderBy, out _direction);
+        PageInfo.ResetPage();
+        UpdatePage();
+    }
+
+    public void FilterMovies()
+    {
+        new FilterMenu.FilterMenu( _filterToString, _where, NextLevel()).Run(out _filterToString, out _where);
+        PageInfo.ResetPage();
+        UpdatePage();
+    }
+
+    protected override string DisplayToMenu(Movie? item)
+    {
+        return item is null ? "" : item.ToShortString();
+    }
+    
+
+    protected override PageInfo<Movie> GetPageInfo(PageInfo<Movie> pageInfo)
+    {
+        return PageInfo = FileIoSingleton.FileIo.GetPageMovies(pageInfo, _orderBy, _direction, _where);
+    }
+
+    protected override void RunOnClick(ConsoleMenu thisMenu, Movie? item)
+    {
+        new EditMenu(item, NextLevel()).Run();
+        UpdatePage();
     }
 }

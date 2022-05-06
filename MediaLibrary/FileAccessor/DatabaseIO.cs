@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.ComponentModel;
+using System.Linq;
+using System.Linq.Expressions;
 using ConsoleApp1.FileAccessor.Database.Context;
 using ConsoleApp1.MediaEntities;
 using Microsoft.EntityFrameworkCore;
@@ -49,14 +51,28 @@ public class DatabaseIo : IFileIo
 
     //
 
-    public List<Movie> GetAllMovies()
+
+    public PageInfo<Movie> GetPageMovies(PageInfo<Movie> pageInfo, Func<Movie, object> orderBy,
+        ListSortDirection direction, Func<Movie, bool> where)
     {
         using var db = new MovieContext();
-        return db.Movies
+        var movies = db.Movies
             .Include(x => x.MovieGenres)
             .ThenInclude(x => x.Genre)
             .Include(x => x.UserMovies)
-            .ToList();
+            .Where(where);
+            
+        
+
+        pageInfo.TotalItemCount = movies.Count();
+
+        var page = movies
+            .OrderByDynamic(orderBy, direction)
+            .Select(p => p)
+            .Skip(pageInfo.PageIndex * pageInfo.PageLength)
+            .Take(pageInfo.PageLength);
+        pageInfo.Items = page.ToList();
+        return pageInfo;
     }
 
     public bool AddMovie(Movie movie)

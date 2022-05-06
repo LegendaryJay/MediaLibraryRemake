@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using Castle.Core.Internal;
 using ConsoleApp1.ConsoleMenus.Multi_purpose;
 using ConsoleApp1.MediaEntities;
@@ -6,22 +7,30 @@ namespace ConsoleApp1.ConsoleMenus.Top.MovieMenu.SortMenu;
 
 public class SortMenu : MenuBase
 {
-    private readonly ItemIndexTracker<Movie> _tracker;
+    private Func<Movie, object> _orderBy = movie => movie.Id;
+    private ListSortDirection _direction = ListSortDirection.Ascending;
 
     
-    private void OnPress<T>(Func<Movie, T?> toComparable, T defaultValue) where T : IComparable
+    private void OnPress(Func<Movie, object> orderBy, ListSortDirection direction)
     {
-        _tracker.Items.Sort((x, y) => (toComparable(x) ?? defaultValue).CompareTo(toComparable(y) ?? defaultValue));
+        _orderBy = orderBy;
+        _direction = direction;
         ThisMenu.CloseMenu();
     }
 
-    public SortMenu(ItemIndexTracker<Movie> tracker, int level) : base("Sort By", level)
+    public SortMenu(int level) : base("Sort By", level)
     {
-        _tracker = tracker;
         ThisMenu
-            .Add("Id", () => OnPress(x => x.Id, 0))
-            .Add("Title", () => OnPress(x => x.Title, ""))
-            .Add("ReleaseDate", () => OnPress(x => x.ReleaseDate,DateTime.MinValue))
-            .Add("Rating", () => OnPress(x => x.UserMovies.IsNullOrEmpty() ? 0 :  -1 * x.UserMovies.Average(y => y.Rating), 0));
+            .Add("Id", () => OnPress(x => x.Id, ListSortDirection.Ascending))
+            .Add("Title", () => OnPress(x => x.Title, ListSortDirection.Ascending))
+            .Add("ReleaseDate", () => OnPress(x => x.ReleaseDate, ListSortDirection.Ascending))
+            .Add("Rating", () => OnPress(x => x.UserMovies.IsNullOrEmpty() ? 0 :  -1 * x.UserMovies.Average(y => y.Rating), ListSortDirection.Descending));
+    }
+
+    public void Run(out Func<Movie, object> orderBy, out ListSortDirection direction)
+    {
+        Run();
+        orderBy = _orderBy;
+        direction = _direction;
     }
 }
