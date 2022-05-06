@@ -57,7 +57,7 @@ public abstract class DisplayBase<T> : MenuBase
 
     protected void UpdatePage()
     {
-        GetPageInfo(PageInfo);
+        PageInfo = GetPageInfo(PageInfo);
         ThisMenu.Configure(config =>
             {
                 config.WriteHeaderAction = () =>
@@ -67,7 +67,7 @@ public abstract class DisplayBase<T> : MenuBase
         );
         for (var i = 0; i < PageInfo.PageLength; i++)
         {
-            var item = PageInfo.Items.IsNullOrEmpty() ? default : PageInfo.Items[i];
+            var item = (PageInfo.Items.IsNullOrEmpty() || i >= PageInfo.Items.Count()) ? default : PageInfo.Items[i];
             ThisMenu.Items[i + 1].Name = DisplayMenuName(item) +
                                          (i == PageInfo.PageLength - 1 ? "\n" : "");
             var action = 

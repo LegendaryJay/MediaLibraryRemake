@@ -20,6 +20,7 @@ public class FilterMenu : MenuBase
         SetStringFilter(filterBy);
         var filterByList = filterBy.Split();
         _where = m => filterByList.All(searchTerm => m.Title.ToLower().Contains(searchTerm.ToLower()));
+        ThisMenu.CloseMenu();
     }
 
     private void SetStringFilter(string str)
@@ -33,6 +34,7 @@ public class FilterMenu : MenuBase
         if (filterBy is null || filterBy.Length != 4 || !int.TryParse(filterBy, out var yearInt)) return;
         _where = m => m.ReleaseDate.Year == yearInt || m.Title.Contains($"({yearInt})");
         SetStringFilter("Year: " + filterBy);
+        ThisMenu.CloseMenu();
     }
 
     private void FilterByGenres()
@@ -49,6 +51,7 @@ public class FilterMenu : MenuBase
                     .Contains(filterId)
             );
         SetStringFilter($"Genres {string.Join(", ", movie.MovieGenres.Select(x => x.Genre.Name))}");
+        ThisMenu.CloseMenu();
     }
 
 
@@ -69,6 +72,5 @@ public class FilterMenu : MenuBase
         Run();
         filterToString = _filterToString;
         where = _where;
-        ThisMenu.CloseMenu();
     }
 }

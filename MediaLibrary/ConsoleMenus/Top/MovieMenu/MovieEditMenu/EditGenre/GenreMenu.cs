@@ -12,11 +12,11 @@ public class GenreMenu : DisplayBase<GenreDummy>
     private const string SelectedString = " * ";
     private readonly List<GenreDummy> _genres = new();
     private readonly Movie _movie;
-    
+
 
     public GenreMenu(Movie? movie, int level) : base("Choose Genres", level)
     {
-        _movie = movie?? new Movie();
+        _movie = movie ?? new Movie();
         _movie.MovieGenres ??= new List<MovieGenres>();
         var genres = FileIoSingleton.FileIo.GetAllGenres();
         PageInfo.TotalItemCount = genres.Count;
@@ -74,8 +74,8 @@ public class GenreMenu : DisplayBase<GenreDummy>
 
     protected override PageInfo<GenreDummy> GetPageInfo(PageInfo<GenreDummy> pageInfo)
     {
-        var items = _genres.Skip(pageInfo.PageIndex * pageInfo.PageLength).Take(pageInfo.PageLength);
-        pageInfo.Items = items.ToList() ?? new List<GenreDummy>();
+        pageInfo.Items = _genres.Skip(pageInfo.PageIndex * pageInfo.PageLength).Take(pageInfo.PageLength).ToList() ??
+                         new List<GenreDummy>();
         return pageInfo;
     }
 
