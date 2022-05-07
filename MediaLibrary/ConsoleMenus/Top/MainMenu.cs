@@ -1,4 +1,5 @@
 ﻿using ConsoleApp1.ConsoleMenus.Multi_purpose;
+using static ConsoleApp1.FileAccessor.FileIoSingleton;
 
 namespace ConsoleApp1.ConsoleMenus.Top;
 
@@ -12,10 +13,11 @@ public class MainMenu : MenuBase
                 mediaMenu.Run();
             }
         );
-        // .Add("Users", () =>
-        //     {
-        //         
-        //     }
-        // )
+        ThisMenu.Add("Users", () =>
+            {
+                new UserMenu.UserMenu(NextLevel()).Run();
+            }
+        );
+
     }
 }

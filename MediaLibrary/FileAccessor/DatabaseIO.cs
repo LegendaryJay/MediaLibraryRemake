@@ -136,91 +136,69 @@ public class DatabaseIo : IFileIo
         return db.SaveChanges() > 0;
     }
 
-
-    public List<Movie> FilterMovieByTitle(string str)
+    public PageInfo<User> GetPageUsers(PageInfo<User> pageInfo)
     {
         using var db = new MovieContext();
-        return db.Movies
-            .Include(x => x.MovieGenres)
+
+        pageInfo.TotalItemCount = db.Users.Count();
+        pageInfo.Items = db.Users
+            .Include(x => x.UserMovies)
+            .Include(x => x.Occupation)
+            .Skip(pageInfo.PageIndex * pageInfo.PageLength)
+            .Take(pageInfo.PageLength)
+            .ToList();
+        return pageInfo;
+    }
+    public Dictionary<string, Movie> BestMovieByOccupation()
+    {
+        using var db = new MovieContext();
+
+        // var Occupations = db.Occupations;
+        // foreach (var occupation in Occupations)
+        // {
+        //     db.Movies.
+        // }
+        //
+        var things = db.UserMovies
+            .Include(x => x.User)
+            .Include(x => x.Movie)
+            .ThenInclude(x => x.MovieGenres)
             .ThenInclude(x => x.Genre)
-            .Include(x => x.UserMovies)
-            .Where(x => x.Title.Contains(str))
-            .ToList();
-    }
+            .GroupBy(x => x.User.Occupation)
+            .Select(
+                x => new
+                {
+                    x.Key.Name,
+                    TopMovie = x.Select(y => y.Movie)
+                        .OrderBy(
+                            y => y.UserMovies
+                                .Average(
+                                    z => z.Rating
+                                )
+                        )
+                        .First()
+                }
+            ).ToList();
+        var result = things.ToDictionary(thing => thing.Name, thing => thing.TopMovie);
 
-    public List<Movie> FilterMovieByGenre(List<long> indexList)
-    {
-        using var db = new MovieContext();
-        return db.Movies
-            .Include(x => x.MovieGenres)
-            .ThenInclude(x => x.Genre)
-            .Include(x => x.UserMovies)
-            .Where(
-                m => m.MovieGenres.Select(mg => mg.GenreId).Any(indexList.Contains)
-            )
-            .ToList();
+        return result;
 
-        return new List<Movie>();
-    }
-
-    public List<Movie> FilterMovieByReleaseDate(int year)
-    {
-        using var db = new MovieContext();
-        return db.Movies
-            .Include(c => c.MovieGenres)
-            .ThenInclude(c => c.Genre)
-            .Include(x => x.UserMovies)
-            .Where(x => Equals(x.ReleaseDate, year))
-            .ToList();
-    }
-
-    public List<Movie> FilterMovieByRating(int rating)
-    {
-        using var db = new MovieContext();
-        return db.Movies
-            .Include(c => c.MovieGenres)
-            .ThenInclude(c => c.Genre)
-            .Include(x => x.UserMovies)
-            .Where(x => x.UserMovies.Average(y => y.Rating) > rating)
-            .OrderByDescending(x => x.UserMovies.Average(y => y.Rating))
-            .ThenBy(x => x.Title)
-            .ToList();
-    }
-
-
-    public List<Movie> BestMovieByOccupation()
-    {
-        using var db = new MovieContext();
-        // return db.Users
+        //db.Movies
+        //     .Include(c => c.MovieGenres)
+        //     .ThenInclude(c => c.Genre)
         //     .Include(x => x.UserMovies)
-        //     .ThenInclude(x => x.Movie)
-        //     .ThenInclude(x => x.MovieGenres)
-        //     .ThenInclude(x => x.Genre)
-        //     .GroupBy(x => x.Occupation)
-        //     .SelectMany( x => x.))
-        //     .O(x => x.UserMovies.Average(y => y.Rating))
+        //     .ThenInclude(x => x.User)
+        //     .GroupBy(x => x.UserMovies.Select(y => y.User.Occupation))
         //     .SelectMany(x => x.Take(1))
-        return db.Movies
-            .Include(c => c.MovieGenres)
-            .ThenInclude(c => c.Genre)
-            .Include(x => x.UserMovies)
-            .ThenInclude(x => x.User)
-            .GroupBy(x => x.UserMovies.Select(y => y.User.Occupation))
-            .SelectMany(x => x.Take(1))
-            .OrderByDescending(x => x.UserMovies.Average(y => y.Rating))
-            .ThenBy(x => x.Title)
-            .ToList();
+        //     .OrderByDescending(x => x.UserMovies.Average(y => y.Rating))
+        //     .ThenBy(x => x.Title)
+        //     .ToList();
     }
 
     public List<Genre> GetAllGenres()
     {
         using var db = new MovieContext();
         return db.Genres.ToList();
-    }
-
-    public List<User> GetAllUsers()
-    {
-        throw new NotImplementedException();
     }
 
     public bool AddRating(long userId, int rating)

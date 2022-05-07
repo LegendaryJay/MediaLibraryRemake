@@ -12,4 +12,25 @@ public class User
 
     public virtual Occupation Occupation { get; set; }
     public virtual ICollection<UserMovie> UserMovies { get; set; }
+    
+    public string ToShortString()
+    {
+        return $"ID: {Id, -4}|  {Age,-2}/{Gender,-1}";
+    }
+
+    public string ToPrettyString()
+    {
+        return $" - User {Id}:" +
+               $"\n\tGender: {Gender}" +
+               $"\n\tAge: {Age}" +
+               $"\n\tZipCode {ZipCode}" +
+               $"\n\tOccupation {Occupation}";
+        
+    }
 }
+
+//Looks like there are 2 main groups: 
+//Movie: Title, release date, List(Genre), List(Ratings, DateRated)
+//User: Id, age, gender, zipcode, Occupations
+
+//Users rate

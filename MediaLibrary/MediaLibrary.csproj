@@ -52,6 +52,7 @@
     <ItemGroup>
       <Folder Include="ConsoleMenus\Top\MovieMenu\Analyze" />
       <Folder Include="!ExternalFiles" />
+      <Folder Include="ConsoleMenus\Top\UserMenu\UserDisplay\Login" />
     </ItemGroup>
 
 </Project>

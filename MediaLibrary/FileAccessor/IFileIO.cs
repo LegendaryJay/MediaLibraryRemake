@@ -14,7 +14,9 @@ public interface IFileIo
 
     public List<Genre> GetAllGenres();
 
-    public List<User> GetAllUsers();
+    public Dictionary<string, Movie> BestMovieByOccupation();
+
+    public PageInfo<User> GetPageUsers(PageInfo<User> pageInfo);
     public bool AddRating(long userId, int rating);
     public bool AddUser(User user);
 }
