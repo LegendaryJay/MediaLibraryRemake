@@ -2,6 +2,7 @@ using System.Net.NetworkInformation;
 using Castle.Core.Internal;
 using ConsoleApp1.ConsoleMenus.Multi_purpose;
 using ConsoleApp1.ConsoleMenus.Top.MovieMenu.MovieEditMenu.EditGenre;
+using ConsoleApp1.FileAccessor;
 using ConsoleApp1.MediaEntities;
 using ConsoleTools;
 
@@ -37,6 +38,12 @@ public class FilterMenu : MenuBase
         ThisMenu.CloseMenu();
     }
 
+    private void FilterByRated()
+    {
+        _where = m => m.UserMovies.Select(x => x.User.Id).Contains(LoggedInUser.Instance.User.Id);
+        SetStringFilter("Rated by User " + LoggedInUser.Instance.User.Id);
+        ThisMenu.CloseMenu();
+    }
     private void FilterByGenres()
     {
         var movie = new Movie();
@@ -65,6 +72,10 @@ public class FilterMenu : MenuBase
         ThisMenu.Add(prefix + "Title", FilterByTitle)
             .Add(prefix + "Year", FilterByYear)
             .Add(prefix + "Genre", FilterByGenres);
+        if (LoggedInUser.Instance.IsLoggedIn)
+        {
+            ThisMenu.Add("Show Rated", FilterByRated);
+        }
     }
 
     public void Run(out string filterToString, out Func<Movie, bool> where)
