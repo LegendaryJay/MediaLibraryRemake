@@ -19,4 +19,5 @@ public interface IFileIo
     public PageInfo<User> GetPageUsers(PageInfo<User> pageInfo);
     public bool AddRating(long userId, int rating);
     public bool AddUser(User user);
+    List<Occupation> GetAllOccupations();
 }

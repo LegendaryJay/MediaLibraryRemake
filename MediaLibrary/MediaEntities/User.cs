@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Reflection.Metadata;
+using Castle.Core.Internal;
 
 namespace ConsoleApp1.MediaEntities;
 
@@ -20,11 +22,15 @@ public class User
 
     public string ToPrettyString()
     {
+
+        var gender = Gender.IsNullOrEmpty() ? "[Not Added]" : Gender;
+        var occupation = Occupation is not null ? Occupation.Name : "[Empty]";
+
         return $" - User {Id}:" +
-               $"\n\tGender: {Gender}" +
+               $"\n\tGender: {gender}" +
                $"\n\tAge: {Age}" +
                $"\n\tZipCode {ZipCode}" +
-               $"\n\tOccupation {Occupation}";
+               $"\n\tOccupation {occupation}";
         
     }
 }

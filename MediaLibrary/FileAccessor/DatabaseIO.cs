@@ -208,6 +208,17 @@ public class DatabaseIo : IFileIo
 
     public bool AddUser(User user)
     {
-        throw new NotImplementedException();
+        using var db = new MovieContext();
+        var occ = db.Occupations.Find(user.Occupation.Id);
+        user.Occupation = occ;
+        db.Users
+            .Add(user);
+        return db.SaveChanges() > -1;
+    }
+
+    public List<Occupation> GetAllOccupations()
+    {
+        using var db = new MovieContext();
+        return db.Occupations.ToList();
     }
 }

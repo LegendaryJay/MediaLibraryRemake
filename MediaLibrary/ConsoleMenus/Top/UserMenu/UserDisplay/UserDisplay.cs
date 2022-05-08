@@ -12,6 +12,11 @@ public class UserDisplay : MenuBase
         this._user = user;
         ThisMenu.Configure(x => { x.WriteHeaderAction = () => Console.WriteLine(_user.ToPrettyString()); }
         );
-        ThisMenu.Add("Login", () => { });
+        ThisMenu.Add("Login", () =>
+        {
+            LoggedInUser.Instance.Login(user);
+            ThisMenu.CloseMenu();
+            ReadLine.Read("User " + user.Id + " is now logged in");
+        });
     }
 }
