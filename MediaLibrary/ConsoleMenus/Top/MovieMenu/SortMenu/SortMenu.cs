@@ -18,6 +18,7 @@ public class SortMenu : MenuBase
         _orderBy = orderBy;
         _direction = direction;
         ThisMenu.CloseMenu();
+        
     }
 
     public SortMenu(int level) : base("Sort By", level)

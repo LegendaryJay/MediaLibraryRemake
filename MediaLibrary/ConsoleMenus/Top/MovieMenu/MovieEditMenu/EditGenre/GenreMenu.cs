@@ -4,11 +4,13 @@ using ConsoleApp1.FileAccessor;
 using ConsoleApp1.MediaEntities;
 using ConsoleTools;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.VisualBasic;
 
 namespace ConsoleApp1.ConsoleMenus.Top.MovieMenu.MovieEditMenu.EditGenre;
 
 public class GenreMenu : DisplayBase<GenreDummy>
 {
+    private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
     private const string SelectedString = " * ";
     private readonly List<GenreDummy> _genres = new();
     private readonly Movie _movie;
@@ -53,6 +55,7 @@ public class GenreMenu : DisplayBase<GenreDummy>
         }
 
         FileIoSingleton.FileIo.UpdateMovie(_movie);
+        logger.Info("User chose desired genres: " + string.Join(", ", _genres.Where(x => x.IsRecorded).Select(x => x.Name)));
     }
 
     protected override string PrependToName(GenreDummy? item)

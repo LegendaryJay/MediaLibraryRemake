@@ -12,6 +12,7 @@ namespace ConsoleApp1.ConsoleMenus.Top.MovieMenu.MovieEditMenu;
 
 public class EditMenu : MenuBase
 {
+    private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
     private static readonly string[] MenuName =
     {
         "Title",
@@ -119,8 +120,11 @@ public class EditMenu : MenuBase
                         2,
                         () =>
                         {
+                            logger.Info(movie.Title + " Deleted");
                             FileIoSingleton.FileIo.DeleteMovie(movie.Id);
                             ThisMenu.CloseMenu();
+                            
+                            
                         }
                     ).Run();
                 }

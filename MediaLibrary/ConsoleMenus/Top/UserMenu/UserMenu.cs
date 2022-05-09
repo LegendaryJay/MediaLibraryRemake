@@ -10,6 +10,7 @@ namespace ConsoleApp1.ConsoleMenus.Top.UserMenu;
 
 public class UserMenu : DisplayBase<User>
 {
+    
     public UserMenu(int level) : base("Users", level)
     {
         ThisMenu.Add("Add User", new AddUser(NextLevel()).Run)

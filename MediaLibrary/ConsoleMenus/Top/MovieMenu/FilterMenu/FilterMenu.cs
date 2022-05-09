@@ -11,6 +11,7 @@ namespace ConsoleApp1.ConsoleMenus.Top.MovieMenu.FilterMenu;
 
 public class FilterMenu : MenuBase
 {
+    private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
     private const string Prefix = "| ";
     private string _filterToString;
     private Func<Movie, bool> _where;
@@ -23,6 +24,7 @@ public class FilterMenu : MenuBase
         var filterByList = filterBy.Split();
         _where = m => filterByList.All(searchTerm => m.Title.ToLower().Contains(searchTerm.ToLower()));
         ThisMenu.CloseMenu();
+        logger.Info("User Filtered by title");
     }
 
     private void SetStringFilter(string str)
@@ -37,6 +39,7 @@ public class FilterMenu : MenuBase
         _where = m => m.ReleaseDate.Year == yearInt || m.Title.Contains($"({yearInt})");
         SetStringFilter("Year: " + filterBy);
         ThisMenu.CloseMenu();
+        logger.Info("User Filtered by Year");
     }
 
     private void FilterByRated()
@@ -48,6 +51,7 @@ public class FilterMenu : MenuBase
         };
         SetStringFilter("Rated by User " + user.Id);
         ThisMenu.CloseMenu();
+        logger.Info("User Filtered by Rated");
     }
 
     private void FilterByGenres()
@@ -65,6 +69,7 @@ public class FilterMenu : MenuBase
             );
         SetStringFilter($"Genres {string.Join(", ", movie.MovieGenres.Select(x => x.Genre.Name))}");
         ThisMenu.CloseMenu();
+        logger.Info("User Filtered by Genres");
     }
 
 

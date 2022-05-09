@@ -7,6 +7,7 @@ namespace ConsoleApp1.ConsoleMenus.Top.UserMenu.Add.OccupationMenu;
 
 public class OccupationMenu : DisplayBase<Occupation>
 {
+    private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
     private readonly List<Occupation> _occupations;
     private readonly User _user;
 
@@ -34,5 +35,6 @@ public class OccupationMenu : DisplayBase<Occupation>
         if (item is null) return;
         _user.Occupation = item;
         ThisMenu.CloseMenu();
+        logger.Info("User chose Occupation: " + item);
     }
 }

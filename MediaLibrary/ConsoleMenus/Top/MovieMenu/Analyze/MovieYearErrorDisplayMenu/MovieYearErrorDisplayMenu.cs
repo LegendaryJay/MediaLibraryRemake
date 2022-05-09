@@ -7,6 +7,7 @@ namespace ConsoleApp1.ConsoleMenus.Top.MovieMenu.Analyze.MovieYearErrorDisplayMe
 
 public class MovieYearErrorDisplayMenu : DisplayBase<MovieWithYearError>
 {
+    private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
     private List<MovieWithYearError> _items; 
     public MovieYearErrorDisplayMenu(int level) : base("Movie Year Difference", level)
     {
@@ -31,5 +32,6 @@ public class MovieYearErrorDisplayMenu : DisplayBase<MovieWithYearError>
 
     protected override void RunOnClick(ConsoleMenu thisMenu, MovieWithYearError? item)
     {
+        logger.Info("user did nothing in MovieYearErrorMenu");
     }
 }

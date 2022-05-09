@@ -26,6 +26,6 @@ public class RateMenu : MenuBase
         var user = LoggedInUser.Instance.User;
         FileIoSingleton.FileIo.Rate(user.Id, _movie.Id, i);
         ReadLine.Read(user.ToShortString() + $"\nRated: {_movie.Title} a {i} / 5");
-        ThisMenu.CloseMenu();
+        ThisMenu.CloseMenu(); 
     }
 }

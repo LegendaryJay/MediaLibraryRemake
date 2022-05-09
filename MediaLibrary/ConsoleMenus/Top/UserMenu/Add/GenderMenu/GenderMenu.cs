@@ -5,6 +5,7 @@ namespace ConsoleApp1.ConsoleMenus.Top.UserMenu.Add.GenderMenu;
 
 public class GenderMenu : MenuBase
 {
+    private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
     private readonly User _user;
     public GenderMenu(User user, int level) : base("Select Gender", level)
     {
@@ -17,6 +18,7 @@ public class GenderMenu : MenuBase
     {
         _user.Gender = str;
         ThisMenu.CloseMenu();
+        logger.Info("User set gender as " + str);
     }
 
 }

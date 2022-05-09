@@ -7,6 +7,7 @@ namespace ConsoleApp1.ConsoleMenus.Top.UserMenu.Add;
 
 public class AddUser : MenuBase
 {
+    private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
     private readonly User _user = new User();
 
     private void SetAge()
@@ -15,12 +16,14 @@ public class AddUser : MenuBase
         if (!int.TryParse(input, out var intInput)) return;
         if (intInput is > 0 and < 150) _user.Age = intInput;
         UpdatePage();
+        logger.Info("User age set as " + input);
     }
 
     private void SetOccupation()
     {
         new OccupationMenu.OccupationMenu(_user, NextLevel()).Run();
         UpdatePage();
+        logger.Info("User occupation set as " + _user.Occupation);
     }
 
     private void SetZip()
@@ -29,6 +32,8 @@ public class AddUser : MenuBase
         if (!int.TryParse(input, out var intInput)) return;
         if (intInput is > 9999 and < 99999) _user.ZipCode = input;
         UpdatePage();
+        logger.Info("User zip set as " + input);
+        
     }
 
     private bool ValidateUser()
@@ -50,12 +55,14 @@ public class AddUser : MenuBase
         if (!ValidateUser()) return;
         FileIoSingleton.FileIo.AddUser(_user);
         ThisMenu.CloseMenu();
+        logger.Info("User Saved");
     }
 
     private void SetGender()
     {
         new GenderMenu.GenderMenu(_user, NextLevel()).Run();
         UpdatePage();
+        logger.Info("User set gender as " + _user.Age);
     }
 
     public AddUser(int level) : base("Add User", level)

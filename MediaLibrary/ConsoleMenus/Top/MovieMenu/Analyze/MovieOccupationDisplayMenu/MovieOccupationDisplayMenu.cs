@@ -6,6 +6,7 @@ namespace ConsoleApp1.ConsoleMenus.Top.MovieMenu.Analyze.MovieOccupationDisplayM
 
 public class MovieOccupationDisplayMenu : DisplayBase<MovieWithOccupation>
 {
+    private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
     public MovieOccupationDisplayMenu(int level) : base("Top Movies by Occupation", level)
     {
         _items = FileIoSingleton.FileIo.BestMovieByOccupation();
@@ -30,6 +31,6 @@ public class MovieOccupationDisplayMenu : DisplayBase<MovieWithOccupation>
 
     protected override void RunOnClick(ConsoleMenu thisMenu, MovieWithOccupation? item)
     {
-        
+        logger.Info("User did nothing in MovieOccupationDisplayMenu");
     }
 }
