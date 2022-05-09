@@ -67,7 +67,7 @@ public class AddUser : MenuBase
 
     public AddUser(int level) : base("Add User", level)
     {
-        ThisMenu.Add("Set Gender", SetGender)
+        ThisMenu
             .Add("Set Age", SetAge)
             .Add("Set Gender", SetGender)
             .Add("Set ZipCode", SetZip)
