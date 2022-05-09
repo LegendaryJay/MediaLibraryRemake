@@ -13,6 +13,7 @@ namespace ConsoleApp1.ConsoleMenus.Top.MovieMenu.MovieEditMenu;
 public class EditMenu : MenuBase
 {
     private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+
     private static readonly string[] MenuName =
     {
         "Title",
@@ -32,12 +33,13 @@ public class EditMenu : MenuBase
                 var ratingString = "";
                 if (LoggedInUser.Instance.IsLoggedIn)
                 {
-                    ReadLine.Read(_movie.UserMovies.ToString());
                     var loggedInUser = LoggedInUser.Instance.User;
                     ratingString = "";
                     if (loggedInUser is not null)
                     {
-                        var rating = _movie.UserMovies.FirstOrDefault(x => x.UserId == loggedInUser.Id);
+                        var rating = _movie.UserMovies is null
+                            ? null
+                            : _movie.UserMovies.FirstOrDefault(x => x.UserId == loggedInUser.Id);
                         ratingString = "\n\tUser Rating: " + (rating is not null ? $"{rating.Rating}" : "_") + " / 5";
                     }
                 }
@@ -53,6 +55,11 @@ public class EditMenu : MenuBase
         {
             _movie.Title = _movieChanges.Title;
             _movie.ReleaseDate = _movieChanges.ReleaseDate;
+            if (_movie.MovieGenres is null)
+            {
+                _movie.MovieGenres = new List<MovieGenres>();
+            }
+
             _movie.MovieGenres.Clear();
             foreach (var movieGenre in _movieChanges.MovieGenres)
             {
@@ -123,8 +130,6 @@ public class EditMenu : MenuBase
                             logger.Info(movie.Title + " Deleted");
                             FileIoSingleton.FileIo.DeleteMovie(movie.Id);
                             ThisMenu.CloseMenu();
-                            
-                            
                         }
                     ).Run();
                 }

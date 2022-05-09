@@ -14,7 +14,9 @@ public class SortMenu : MenuBase
     
     private void OnPress(Func<Movie, object> orderBy, ListSortDirection direction)
     {
+        //
         logger.Info("User Chose a SortBy Option");
+        //
         _orderBy = orderBy;
         _direction = direction;
         ThisMenu.CloseMenu();
