@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
+using ConsoleApp1.ConsoleMenus.Multi_purpose;
 using ConsoleApp1.ConsoleMenus.Top.MovieMenu.Analyze.MovieOccupationDisplayMenu;
 using ConsoleApp1.ConsoleMenus.Top.MovieMenu.Analyze.MovieYearErrorDisplayMenu;
 using ConsoleApp1.FileAccessor.Database.Context;
@@ -12,48 +13,6 @@ namespace ConsoleApp1.FileAccessor;
 
 public class DatabaseIo : IFileIo
 {
-    // public bool AddItem<T>(T item)
-    // {
-
-    // }
-    //
-    // public bool UpdateItem<T>(long id, T item)
-    // {
-    //     using var db = new MovieContext();
-    //     var dbMovie = db.Movies.Find(id);
-    //     if (dbMovie is not null)
-    //     {
-    //         db.Attach(item);
-    //         db.Entry(item).State = EntityState.Modified;
-    //     }
-    // }
-    //
-    // public List<T> GetAllMovies<T>()
-    // {
-    //     switch
-    //
-
-    //
-    // public bool SetItem<T>(T item)
-    // {
-    //     using var db = new MovieContext();
-    //     var dbMovie = db.Movies.Find(item.Id);
-    //     if (dbMovie is not null)
-    //     {
-    //         db.Attach(movie);
-    //         db.Entry(movie).State = EntityState.Modified;
-    //     }
-    //     else
-    //     {
-    //     }
-    //
-    //     return db.SaveChanges() > 0;
-    // }
-    //
-
-    //
-
-
     public PageInfo<Movie> GetPageMovies(PageInfo<Movie> pageInfo, Func<Movie, object> orderBy,
         ListSortDirection direction, Func<Movie, bool> where)
     {
@@ -82,6 +41,7 @@ public class DatabaseIo : IFileIo
 
         original.Id = movie.Id;
         original.Title = movie.Title;
+        original.ReleaseDate = movie.ReleaseDate;
 
         db.Add(original);
 
@@ -116,6 +76,7 @@ public class DatabaseIo : IFileIo
 
         original.Id = movie.Id;
         original.Title = movie.Title;
+        original.ReleaseDate = movie.ReleaseDate;
         original.MovieGenres.Clear();
 
         foreach (var genre in movie.MovieGenres)

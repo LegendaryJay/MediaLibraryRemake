@@ -1,4 +1,4 @@
-namespace ConsoleApp1.FileAccessor;
+namespace ConsoleApp1.ConsoleMenus.Multi_purpose;
 
 public class PageInfo<T>
 {

@@ -1,6 +1,5 @@
 using Castle.Core.Internal;
 using ConsoleApp1.ConsoleMenus.Multi_purpose;
-using ConsoleApp1.ConsoleMenus.Top.UserMenu.Add.EditGenre;
 using ConsoleApp1.FileAccessor;
 using ConsoleApp1.MediaEntities;
 
@@ -20,7 +19,7 @@ public class AddUser : MenuBase
 
     private void SetOccupation()
     {
-        new OccupationMenu(_user, NextLevel()).Run();
+        new OccupationMenu.OccupationMenu(_user, NextLevel()).Run();
         UpdatePage();
     }
 

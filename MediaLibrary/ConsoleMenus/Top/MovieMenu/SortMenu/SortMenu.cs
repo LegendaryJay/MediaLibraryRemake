@@ -7,12 +7,14 @@ namespace ConsoleApp1.ConsoleMenus.Top.MovieMenu.SortMenu;
 
 public class SortMenu : MenuBase
 {
+    private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
     private Func<Movie, object> _orderBy = movie => movie.Id;
     private ListSortDirection _direction = ListSortDirection.Ascending;
 
     
     private void OnPress(Func<Movie, object> orderBy, ListSortDirection direction)
     {
+        logger.Info("User Chose a SortBy Option");
         _orderBy = orderBy;
         _direction = direction;
         ThisMenu.CloseMenu();

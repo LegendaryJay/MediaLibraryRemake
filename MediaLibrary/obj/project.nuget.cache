@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "08l/JNZo6tEhvWayXTt7ppPipcb1od0ekDh0NqwQiXXAnZQdeC4Kn3PkIbwdfSk2kxkLaHrg3VlvWQG5JBXmnA==",
+  "dgSpecHash": "zO0wiG3kz9IIrTeFrkidoHbxVDClO/CZbFb22g+Rbd6daxnDemO4a+MWbtZ55/nOhYEQlNC9CTp5Ld1NqxOkog==",
   "success": true,
   "projectFilePath": "C:\\Users\\amore\\RiderProjects\\MediaLibraryRemake\\MediaLibrary\\MediaLibrary.csproj",
   "expectedPackageFiles": [
@@ -58,6 +58,8 @@
     "C:\\Users\\amore\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
     "C:\\Users\\amore\\.nuget\\packages\\netstandard.library\\2.0.1\\netstandard.library.2.0.1.nupkg.sha512",
     "C:\\Users\\amore\\.nuget\\packages\\newtonsoft.json\\11.0.2\\newtonsoft.json.11.0.2.nupkg.sha512",
+    "C:\\Users\\amore\\.nuget\\packages\\nlog\\4.7.11\\nlog.4.7.11.nupkg.sha512",
+    "C:\\Users\\amore\\.nuget\\packages\\nlog.extensions.logging\\1.7.4\\nlog.extensions.logging.1.7.4.nupkg.sha512",
     "C:\\Users\\amore\\.nuget\\packages\\readline\\2.0.1\\readline.2.0.1.nupkg.sha512",
     "C:\\Users\\amore\\.nuget\\packages\\runtime.native.system\\4.3.0\\runtime.native.system.4.3.0.nupkg.sha512",
     "C:\\Users\\amore\\.nuget\\packages\\runtime.native.system.data.sqlclient.sni\\4.7.0\\runtime.native.system.data.sqlclient.sni.4.7.0.nupkg.sha512",

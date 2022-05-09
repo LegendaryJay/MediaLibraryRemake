@@ -86,6 +86,10 @@
               "target": "Package",
               "version": "[4.0.8876.1, )"
             },
+            "NLog.Extensions.Logging": {
+              "target": "Package",
+              "version": "[1.7.4, )"
+            },
             "ReadLine": {
               "target": "Package",
               "version": "[2.0.1, )"

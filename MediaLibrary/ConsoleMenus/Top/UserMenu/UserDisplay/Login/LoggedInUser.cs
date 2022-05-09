@@ -1,6 +1,6 @@
 using ConsoleApp1.MediaEntities;
 
-namespace ConsoleApp1.ConsoleMenus.Multi_purpose;
+namespace ConsoleApp1.ConsoleMenus.Top.UserMenu.UserDisplay.Login;
 
 public class LoggedInUser
 {

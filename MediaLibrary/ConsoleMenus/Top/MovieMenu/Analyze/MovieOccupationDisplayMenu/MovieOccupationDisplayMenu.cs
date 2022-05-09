@@ -6,7 +6,6 @@ namespace ConsoleApp1.ConsoleMenus.Top.MovieMenu.Analyze.MovieOccupationDisplayM
 
 public class MovieOccupationDisplayMenu : DisplayBase<MovieWithOccupation>
 {
-    
     public MovieOccupationDisplayMenu(int level) : base("Top Movies by Occupation", level)
     {
         _items = FileIoSingleton.FileIo.BestMovieByOccupation();

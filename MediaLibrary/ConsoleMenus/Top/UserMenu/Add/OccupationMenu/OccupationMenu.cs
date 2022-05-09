@@ -3,7 +3,7 @@ using ConsoleApp1.FileAccessor;
 using ConsoleApp1.MediaEntities;
 using ConsoleTools;
 
-namespace ConsoleApp1.ConsoleMenus.Top.UserMenu.Add.EditGenre;
+namespace ConsoleApp1.ConsoleMenus.Top.UserMenu.Add.OccupationMenu;
 
 public class OccupationMenu : DisplayBase<Occupation>
 {

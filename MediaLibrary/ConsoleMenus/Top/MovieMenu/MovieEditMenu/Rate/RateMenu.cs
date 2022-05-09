@@ -1,8 +1,9 @@
 using ConsoleApp1.ConsoleMenus.Multi_purpose;
+using ConsoleApp1.ConsoleMenus.Top.UserMenu.UserDisplay.Login;
 using ConsoleApp1.FileAccessor;
 using ConsoleApp1.MediaEntities;
 
-namespace ConsoleApp1.ConsoleMenus.Top.MovieMenu.Rate;
+namespace ConsoleApp1.ConsoleMenus.Top.MovieMenu.MovieEditMenu.Rate;
 
 public class RateMenu : MenuBase
 {
@@ -22,7 +23,9 @@ public class RateMenu : MenuBase
     
     private void Rate(int i)
     {
-        FileIoSingleton.FileIo.Rate(LoggedInUser.Instance.User.Id, _movie.Id, i);
+        var user = LoggedInUser.Instance.User;
+        FileIoSingleton.FileIo.Rate(user.Id, _movie.Id, i);
+        ReadLine.Read(user.ToShortString() + $"\nRated: {_movie.Title} a {i} / 5");
         ThisMenu.CloseMenu();
     }
 }

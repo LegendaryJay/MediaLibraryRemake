@@ -1,7 +1,10 @@
-﻿namespace ConsoleApp1.MediaEntities;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ConsoleApp1.MediaEntities;
 
 public class Genre
 {
+    [Key]
     public long Id { get; set; }
     public string Name { get; set; }
 
