@@ -50,7 +50,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="ConsoleMenus\Top\MovieMenu\Analyze" />
       <Folder Include="!ExternalFiles" />
     </ItemGroup>
 

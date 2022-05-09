@@ -40,10 +40,15 @@ public class FilterMenu : MenuBase
 
     private void FilterByRated()
     {
-        _where = m => m.UserMovies.Select(x => x.User.Id).Contains(LoggedInUser.Instance.User.Id);
-        SetStringFilter("Rated by User " + LoggedInUser.Instance.User.Id);
+        var user = LoggedInUser.Instance.User; 
+        _where = m =>
+        {
+            return m.UserMovies is not null && m.UserMovies.Select(x => x.UserId).Contains(user.Id);
+        };
+        SetStringFilter("Rated by User " + user.Id);
         ThisMenu.CloseMenu();
     }
+
     private void FilterByGenres()
     {
         var movie = new Movie();
@@ -74,7 +79,7 @@ public class FilterMenu : MenuBase
             .Add(prefix + "Genre", FilterByGenres);
         if (LoggedInUser.Instance.IsLoggedIn)
         {
-            ThisMenu.Add("Show Rated", FilterByRated);
+            ThisMenu.Add(prefix + "Rated", FilterByRated);
         }
     }
 

@@ -2,6 +2,7 @@ using System.Data.Entity.Infrastructure.Design;
 using Castle.Core.Internal;
 using ConsoleApp1.ConsoleMenus.Multi_purpose;
 using ConsoleApp1.ConsoleMenus.Top.MovieMenu.MovieEditMenu.EditGenre;
+using ConsoleApp1.ConsoleMenus.Top.MovieMenu.Rate;
 using ConsoleApp1.FileAccessor;
 using ConsoleApp1.MediaEntities;
 using ConsoleTools;
@@ -26,7 +27,20 @@ public class EditMenu : MenuBase
     {
         ThisMenu.Configure(config =>
             {
-                config.WriteHeaderAction = () => Console.WriteLine(_movieChanges.ToPrettyString());
+                var ratingString = "";
+                if (LoggedInUser.Instance.IsLoggedIn)
+                {
+                    ReadLine.Read(_movie.UserMovies.ToString());
+                    var loggedInUser = LoggedInUser.Instance.User;
+                    ratingString = "";
+                    if (loggedInUser is not null)
+                    {
+                        var rating = _movie.UserMovies.FirstOrDefault(x => x.UserId == loggedInUser.Id);
+                        ratingString = "\n\tUser Rating: " + (rating is not null ? $"{rating.Rating}" : "_") + " / 5";
+                    }
+                }
+
+                config.WriteHeaderAction = () => Console.WriteLine(_movieChanges.ToPrettyString() + ratingString);
             }
         );
     }
@@ -51,13 +65,19 @@ public class EditMenu : MenuBase
 
             _saveType();
             ThisMenu.CloseMenu();
-        } 
+        }
         else
         {
             ReadLine.Read("Movie not Valid");
         }
-
     }
+
+    private void SetRating()
+    {
+        new RateMenu(_movie, NextLevel()).Run();
+        Update();
+    }
+
     private EditMenu(bool isNew, Movie movie, string title, int level) : base(title, level)
     {
         Action<ConsoleMenu> onSave;
@@ -83,10 +103,14 @@ public class EditMenu : MenuBase
             _saveType = () => FileIoSingleton.FileIo.UpdateMovie(_movie);
         }
 
-        ThisMenu.Add($"{_actionWord} {MenuName[0]}", () => { SetTitle(); });
+        ThisMenu.Add($"{_actionWord} {MenuName[0]}", SetTitle);
         ThisMenu.Add($"{_actionWord} {MenuName[1]}", SetReleaseDate);
         ThisMenu.Add($"{_actionWord} {MenuName[2]}", SetGenres);
+
         if (!isNew)
+        {
+            if (LoggedInUser.Instance.IsLoggedIn)
+                ThisMenu.Add($"Rate", SetRating);
             ThisMenu.Add($"!!Delete!!", () =>
                 {
                     new VerifyMenu(
@@ -100,6 +124,8 @@ public class EditMenu : MenuBase
                     ).Run();
                 }
             );
+        }
+
         ThisMenu.Add("Save and Exit", SaveChanges);
     }
 
@@ -216,6 +242,5 @@ public class EditMenu : MenuBase
     {
         Update();
         base.Run();
-        
     }
 }

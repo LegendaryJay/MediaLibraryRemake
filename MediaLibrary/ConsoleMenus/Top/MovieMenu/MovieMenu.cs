@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using ConsoleApp1.ConsoleMenus.Multi_purpose;
+using ConsoleApp1.ConsoleMenus.Top.MovieMenu.Analyze;
 using ConsoleApp1.ConsoleMenus.Top.MovieMenu.MovieEditMenu;
 using ConsoleApp1.FileAccessor;
 using ConsoleApp1.MediaEntities;
@@ -20,7 +21,7 @@ public class MovieMenu : DisplayBase<Movie>
             .Add("Add", AddMovie)
             .Add("Sort", SortMovies)
             .Add("Filter", FilterMovies)
-            .Add("(not implemented) Analyze", () => { });
+            .Add("Analyze", new AnalyzeMenu(NextLevel()).Run);
     }
 
     public void AddMovie()

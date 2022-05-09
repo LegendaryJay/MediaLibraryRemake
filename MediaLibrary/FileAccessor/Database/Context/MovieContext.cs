@@ -27,7 +27,7 @@ public class MovieContext : DbContext
             .Build();
 
         optionsBuilder
-            .UseLazyLoadingProxies()
+            //.UseLazyLoadingProxies()
             .UseSqlServer(configuration.GetConnectionString("MovieContext")!);
     }
 

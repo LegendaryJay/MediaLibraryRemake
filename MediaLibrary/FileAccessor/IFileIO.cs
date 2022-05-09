@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Linq.Expressions;
+using ConsoleApp1.ConsoleMenus.Top.MovieMenu.Analyze.MovieOccupationDisplayMenu;
+using ConsoleApp1.ConsoleMenus.Top.MovieMenu.Analyze.MovieYearErrorDisplayMenu;
 using ConsoleApp1.MediaEntities;
 
 namespace ConsoleApp1.FileAccessor;
@@ -14,10 +16,11 @@ public interface IFileIo
 
     public List<Genre> GetAllGenres();
 
-    public Dictionary<string, Movie> BestMovieByOccupation();
+    public List<MovieWithOccupation> BestMovieByOccupation();
 
     public PageInfo<User> GetPageUsers(PageInfo<User> pageInfo);
-    public bool AddRating(long userId, int rating);
+    public bool Rate(long userId, long movieId, int rating);
     public bool AddUser(User user);
-    List<Occupation> GetAllOccupations();
+    public List<Occupation> GetAllOccupations();
+    List<MovieWithYearError> GetMovieDiff();
 }

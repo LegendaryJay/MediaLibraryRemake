@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
+using ConsoleApp1.ConsoleMenus.Top.MovieMenu.Analyze.MovieOccupationDisplayMenu;
+using ConsoleApp1.ConsoleMenus.Top.MovieMenu.Analyze.MovieYearErrorDisplayMenu;
 using ConsoleApp1.FileAccessor.Database.Context;
 using ConsoleApp1.MediaEntities;
 using Microsoft.EntityFrameworkCore;
@@ -59,9 +61,9 @@ public class DatabaseIo : IFileIo
 
         pageInfo.TotalItemCount = db.Movies.Where(where).Count();
         pageInfo.Items = db.Movies
+            .Include(x => x.UserMovies)
             .Include(x => x.MovieGenres)
             .ThenInclude(x => x.Genre)
-            .Include(x => x.UserMovies)
             .Where(where)
             .OrderByDynamic(orderBy, direction)
             .Select(p => p)
@@ -107,7 +109,9 @@ public class DatabaseIo : IFileIo
         using var db = new MovieContext();
 
         var original = db.Movies
-            .Include(x => x.MovieGenres).FirstOrDefault(x => x.Id == movie.Id);
+            .Include(x => x.MovieGenres)
+            .Include(x => x.UserMovies)
+            .FirstOrDefault(x => x.Id == movie.Id);
         if (original is null) return false;
 
         original.Id = movie.Id;
@@ -149,50 +153,54 @@ public class DatabaseIo : IFileIo
             .ToList();
         return pageInfo;
     }
-    public Dictionary<string, Movie> BestMovieByOccupation()
+
+    public List<MovieWithOccupation> BestMovieByOccupation()
     {
         using var db = new MovieContext();
 
-        // var Occupations = db.Occupations;
-        // foreach (var occupation in Occupations)
-        // {
-        //     db.Movies.
-        // }
-        //
-        var things = db.UserMovies
+        var results = new List<MovieWithOccupation>();
+
+        var userMovies = db.UserMovies
             .Include(x => x.User)
             .Include(x => x.Movie)
-            .ThenInclude(x => x.MovieGenres)
-            .ThenInclude(x => x.Genre)
-            .GroupBy(x => x.User.Occupation)
-            .Select(
-                x => new
+            .Select(x => new
+            {
+                Rating = x.Rating,
+                Movie = x.Movie,
+                Occupation = x.User.Occupation
+            }).ToList()
+            .GroupBy(x => x.Occupation.Id);
+
+        foreach (var ums in userMovies)
+        {
+            var thing = ums.Select(x => new
                 {
-                    x.Key.Name,
-                    TopMovie = x.Select(y => y.Movie)
-                        .OrderBy(
-                            y => y.UserMovies
-                                .Average(
-                                    z => z.Rating
-                                )
-                        )
-                        .First()
-                }
-            ).ToList();
-        var result = things.ToDictionary(thing => thing.Name, thing => thing.TopMovie);
+                    x.Movie,
+                    x.Rating
+                })
+                .GroupBy(x => x.Movie)
+                .Select(x => new
+                {
+                    Movie = x.Key,
+                    Rating = x.Average(y => y.Rating)
+                })
+                .OrderByDescending(x => x.Rating)
+                .First();
 
-        return result;
 
-        //db.Movies
-        //     .Include(c => c.MovieGenres)
-        //     .ThenInclude(c => c.Genre)
-        //     .Include(x => x.UserMovies)
-        //     .ThenInclude(x => x.User)
-        //     .GroupBy(x => x.UserMovies.Select(y => y.User.Occupation))
-        //     .SelectMany(x => x.Take(1))
-        //     .OrderByDescending(x => x.UserMovies.Average(y => y.Rating))
-        //     .ThenBy(x => x.Title)
-        //     .ToList();
+            var result = new MovieWithOccupation
+            {
+                Movie = thing.Movie,
+                Rating = thing.Rating,
+                Occupation = ums.Select(x => x.Occupation).First()
+            };
+            results.Add(result);
+        }
+
+        results.Sort((x, y) =>
+            string.Compare(x.Occupation.Name, y.Occupation.Name, StringComparison.Ordinal));
+
+        return results;
     }
 
     public List<Genre> GetAllGenres()
@@ -201,9 +209,40 @@ public class DatabaseIo : IFileIo
         return db.Genres.ToList();
     }
 
-    public bool AddRating(long userId, int rating)
+    public bool Rate(long userId, long movieId, int rating)
     {
-        throw new NotImplementedException();
+        using var db = new MovieContext();
+        var userMovie = db.UserMovies.FirstOrDefault(x => x.MovieId == movieId && x.UserId == userId);
+        if (rating == 0)
+        {
+            if (userMovie is not null)
+            {
+                db.Remove(userMovie);
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else if (userMovie is null)
+        {
+            db.Add(new UserMovie
+                {
+                    UserId = userId,
+                    MovieId = movieId,
+                    Rating = rating,
+                    RatedAt = DateTime.Today
+                }
+            );
+        }
+        else
+        {
+            userMovie.Rating = rating;
+            userMovie.RatedAt = DateTime.Now;
+            db.Update(userMovie);
+        }
+
+        return db.SaveChanges() > -1;
     }
 
     public bool AddUser(User user)
@@ -220,5 +259,16 @@ public class DatabaseIo : IFileIo
     {
         using var db = new MovieContext();
         return db.Occupations.ToList();
+    }
+
+    public List<MovieWithYearError> GetMovieDiff()
+    {
+        using var db = new MovieContext();
+        return db.Movies
+            .ToList()
+            .Select(x => new MovieWithYearError(x))
+            .Where(x => x.isDiff)
+            .OrderByDescending(x => x.YearDIff)
+            .ToList();
     }
 }
